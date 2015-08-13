@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/icard_top" >
+
+        <RelativeLayout
+            android:id="@+id/icard_select_tag_rl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:clickable="true"
+            android:paddingLeft="@dimen/icard_text_padding" >
+
+            <ImageView
+                android:layout_width="@dimen/icard_gv_spacing"
+                android:layout_height="@dimen/icard_gv_spacing"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/icard_text_padding"
+                android:src="@drawable/icard_arrow_left" />
+
+            <TextView
+                android:id="@+id/design_tag_select_cancle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="20dip"
+                android:clickable="true"
+                android:text="@string/cannel"
+                android:textColor="@color/orange"
+                android:textSize="@dimen/icard_text_size_middle" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/icard_select_tag_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/design_select_tag_type"
+            android:textColor="@android:color/black"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/icard_select_tag_set"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dip"
+            android:text="@string/icard_select_tag_set"
+            android:textColor="@color/orange"
+            android:textSize="@dimen/icard_text_size_middle" />
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/icard_line" />
+
+    <ListView
+        android:id="@+id/design_tag_select_lv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="#50C8C7CC"
+        android:dividerHeight="1dip" >
+    </ListView>
+
+</LinearLayout>

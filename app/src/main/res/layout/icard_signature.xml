@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/icard_top">
+
+        <RelativeLayout
+            android:id="@+id/design_sig"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:clickable="true"
+            android:paddingLeft="@dimen/icard_text_padding">
+
+            <ImageView
+                android:layout_width="@dimen/icard_gv_spacing"
+                android:layout_height="@dimen/icard_gv_spacing"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/icard_left_right_little"
+                android:src="@drawable/icard_arrow_left" />
+
+            <TextView
+                android:id="@+id/design_signature_cannel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/icard_left_right_big"
+                android:clickable="true"
+                android:text="@string/cannel"
+                android:textColor="@color/orange"
+                android:textSize="@dimen/icard_text_size_middle" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/design_signature_save"
+            android:layout_width="90dip"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:clickable="true"
+            android:paddingRight="@dimen/icard_text_padding">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/icard_left_right_big"
+                android:text="@string/save"
+                android:textColor="@color/orange"
+                android:textSize="@dimen/icard_text_size_middle" />
+
+            <ImageView
+                android:layout_width="@dimen/icard_gv_spacing"
+                android:layout_height="@dimen/icard_gv_spacing"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/icard_left_right_little"
+                android:src="@drawable/icard_arrow_right" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/design_type_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/signature"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/icard_text_size_big" />
+
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/icard_line" />
+
+    <EditText
+        android:id="@+id/signature_input"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/icard_edittext_height"
+        android:background="@color/gray_white"
+        android:gravity="top"
+        android:hint="@string/signature_input"
+        android:inputType="textMultiLine"
+        android:paddingLeft="@dimen/icard_gv_spacing"
+        android:paddingTop="@dimen/icard_gv_spacing"
+        android:textColor="@color/black"
+        android:textSize="@dimen/icard_text_size_middle" />
+
+    <TextView
+        android:id="@+id/design_signature_color_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/icard_gv_spacing"
+        android:text="@string/color_text"
+        android:textColor="@color/gray"
+        android:textSize="@dimen/icard_text_size_middle" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center">
+
+        <com.istroop.istrooprecognize.ColorBarView
+            android:id="@+id/design_signature_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="@dimen/icard_gv_spacing" />
+
+    </RelativeLayout>
+
+</LinearLayout>

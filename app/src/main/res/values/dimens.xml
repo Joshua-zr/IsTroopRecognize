@@ -1,0 +1,38 @@
+<resources>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="icard_left_right_big">20dp</dimen>
+    <dimen name="icard_left_right_little">5dp</dimen>
+    <dimen name="icard_text_size_big">24sp</dimen>
+    <dimen name="icard_top_margin">10dp</dimen>
+    <dimen name="icard_text_size_little">15dp</dimen>
+    <dimen name="icard_text_size_middle">18sp</dimen>
+    <dimen name="icard_gv_spacing">10dp</dimen>
+    <dimen name="icard_pic_button_width">91dp</dimen>
+    <dimen name="icard_pic_button_height">27dp</dimen>
+    <dimen name="icard_text_padding">5dp</dimen>
+    <dimen name="footer">49dp</dimen>
+    <dimen name="his_item_height">90dp</dimen>
+    <dimen name="login_item_height">45dp</dimen>
+    <dimen name="icard_top">50dp</dimen>
+    <dimen name="login_item_margin">20dp</dimen>
+    <dimen name="icard_login_margin_left">60dp</dimen>
+    <dimen name="icard_login_other_height">270dp</dimen>
+    <dimen name="icard_login_other_tv_width">328dp</dimen>
+    <dimen name="icard_login_other_line_height">10dp</dimen>
+    <dimen name="icard_pic_button_width_temp">121dp</dimen>
+    <dimen name="icard_pic_button_height_temp">38dp</dimen>
+    <dimen name="icard_edit_height">30dp</dimen>
+    <dimen name="icard_tag_left">15dp</dimen>
+    <dimen name="icard_tag_size_type_width">30dp</dimen>
+    <dimen name="icard_right">25dp</dimen>
+    <dimen name="icard_tag_card_left">100dp</dimen>
+    <dimen name="icard_edittext_big_width">260dp</dimen>
+    <dimen name="icard_left">40dp</dimen>
+    <dimen name="icard_edittext_little_height">40dp</dimen>
+    <dimen name="icard_edittext_little_width">70dp</dimen>
+    <dimen name="icard_edittext_height">100dp</dimen>
+    <dimen name="line_margin">70dp</dimen>
+</resources>

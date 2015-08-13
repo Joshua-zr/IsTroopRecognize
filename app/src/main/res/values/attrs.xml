@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+	<declare-styleable name="ToggleAttrs">
+	    <attr name="btn_background" format="reference|color"/>
+	    <attr name="slideBtn" format="reference|color"/>
+	    <attr name="turnoff" format="boolean"/>
+	</declare-styleable>
+	
+	<declare-styleable name="CutFrameAttrs">
+	    <attr name="pic_background" format="reference|color"/>
+	    <attr name="cutFrame" format="reference|color"/>
+	    <attr name="cutFrameWidth" format="dimension" />
+	    <attr name="cutFrameHeight" format="dimension" />
+	</declare-styleable>
+	
+</resources>

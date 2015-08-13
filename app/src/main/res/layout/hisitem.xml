@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/his_item_height"
+    android:orientation="horizontal"
+    android:background="@color/white"
+    android:descendantFocusability="blocksDescendants" >
+<RelativeLayout 
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/his_item_height"
+    android:descendantFocusability="blocksDescendants">
+    <ImageView
+        android:layout_width="3dp"
+        android:layout_height="@dimen/his_item_height"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="17dp"
+        android:contentDescription="@string/text_default"
+        android:src="@drawable/line" />
+
+    <ImageView
+        android:id="@+id/picType"
+        android:layout_width="21dp"
+        android:layout_height="21dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="10dp"
+        android:contentDescription="@string/text_default"
+        android:src="@drawable/type1" />
+
+    <TextView
+        android:id="@+id/picTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/picType"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="@dimen/his_item_height"
+        android:layout_toRightOf="@+id/picType"
+        android:text="@string/text_default"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textColor="#333333"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/picDesc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/picTitle"
+        android:layout_below="@+id/picTitle"
+        android:layout_marginTop="3dp"
+        android:layout_marginRight="@dimen/his_item_height"
+        android:layout_alignParentRight="true"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:text="@string/text_default"
+        android:textColor="#545454"
+        android:textSize="13sp" />
+
+    <TextView
+        android:id="@+id/picAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/picTitle"
+        android:layout_alignRight="@+id/picTitle"
+        android:layout_marginRight="@dimen/his_item_height"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/picDesc"
+        android:layout_marginTop="3dp"
+        android:text="@string/text_default"
+        android:textColor="#bababa"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/picCreatetime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/picDesc"
+        android:layout_below="@+id/picAddress"
+        android:layout_marginRight="@dimen/his_item_height"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="3dp"
+        android:text="@string/text_default"
+        android:textColor="#bababa"
+        android:textSize="12sp" />
+
+    <ImageView
+        android:id="@+id/picImage"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/picTitle"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="11dp"
+        android:contentDescription="@string/imagedesc_default"
+        android:src="@drawable/picture_init" />
+
+    <Button
+        android:id="@+id/pic_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/pic_delete"
+        android:visibility="invisible" />
+</RelativeLayout>
+           <RelativeLayout
+        android:id="@+id/his_item_right"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="#ff0000" >
+
+        <TextView
+            android:textSize="@dimen/icard_text_size_middle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="删除"
+            android:textColor="#FFFFFF" />
+    </RelativeLayout>
+</LinearLayout>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/icard_his_title"
+            android:layout_width="match_parent"
+            android:layout_height="50dip"
+            android:background="@color/black"
+            android:visibility="visible">
+
+            <ImageView
+                android:id="@+id/image_pager_return"
+                android:layout_width="14dip"
+                android:layout_height="23dip"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="5dip"
+                android:src="@drawable/icard_arrow_left_blue" />
+
+            <TextView
+                android:id="@+id/image_pager_return_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="3dip"
+                android:layout_toRightOf="@+id/image_pager_return"
+                android:textColor="@color/bule"
+                android:textSize="@dimen/icard_text_size_middle" />
+
+            <ImageView
+                android:id="@+id/image_pager_more"
+                android:layout_width="40dip"
+                android:layout_height="23dip"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dip"
+                android:src="@drawable/image_pager_more" />
+        </RelativeLayout>
+
+        <com.istroop.istrooprecognize.utils.HackyViewPager
+            android:id="@+id/pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/image_pager_ll"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="#60cccccc"
+        android:clickable="true"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <Button
+            android:id="@+id/image_pager_save"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/login_item_height"
+            android:layout_marginLeft="@dimen/icard_gv_spacing"
+            android:layout_marginRight="@dimen/icard_gv_spacing"
+            android:layout_marginTop="@dimen/icard_gv_spacing"
+            android:background="@drawable/button_white"
+            android:gravity="center"
+            android:onClick="photo"
+            android:text="保存到手机"
+            android:textColor="@color/black"
+            android:textSize="@dimen/icard_text_size_middle" />
+
+        <Button
+            android:id="@+id/image_pager_cancel"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/login_item_height"
+            android:layout_marginBottom="@dimen/icard_gv_spacing"
+            android:layout_marginLeft="@dimen/icard_gv_spacing"
+            android:layout_marginRight="@dimen/icard_gv_spacing"
+            android:layout_marginTop="@dimen/icard_gv_spacing"
+            android:background="@drawable/button_black"
+            android:gravity="center"
+            android:onClick="quit"
+            android:text="取消"
+            android:textColor="@color/white"
+            android:textSize="@dimen/icard_text_size_middle" />
+    </LinearLayout>
+</FrameLayout>

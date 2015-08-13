@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="75dip"
+    android:background="#ffffff"
+    android:orientation="horizontal"
+    android:paddingBottom="10dip"
+    android:paddingTop="10dip">
+
+    <ImageView
+        android:id="@+id/design_tag_type_select1_icon"
+        android:layout_width="@dimen/icard_tag_size_type_width"
+        android:layout_height="@dimen/icard_tag_size_type_width"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/icard_tag_left"
+        android:src="@drawable/link_pressed" />
+
+    <TextView
+        android:id="@+id/design_tag_type_select1_desc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="15dip"
+        android:layout_toRightOf="@+id/design_tag_type_select1_icon"
+        android:text="@string/design_tag_type_exp"
+        android:textColor="@color/black"
+        android:textSize="@dimen/icard_text_size_middle" />
+
+    <TextView
+        android:id="@+id/design_tag_type_select1_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="40dip"
+        android:layout_marginRight="@dimen/icard_right"
+        android:layout_toRightOf="@+id/design_tag_type_select1_desc"
+        android:ellipsize="end"
+        android:gravity="right"
+        android:singleLine="true"
+        android:textSize="@dimen/icard_text_size_little" />
+
+    <ImageView
+        android:layout_width="@dimen/icard_gv_spacing"
+        android:layout_height="@dimen/icard_gv_spacing"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/icard_gv_spacing"
+        android:src="@drawable/gray_left_arrow" />
+
+
+</RelativeLayout>

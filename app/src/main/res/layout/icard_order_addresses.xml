@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical" >
+        <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/icard_top" >
+
+            <FrameLayout
+                android:layout_alignParentLeft="true" 
+                android:paddingLeft="@dimen/icard_text_padding"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true">
+         <RelativeLayout
+             android:layout_gravity="center_vertical"
+            android:clickable="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/icard_cards_rl">
+         <ImageView
+           android:layout_width="@dimen/icard_gv_spacing"
+           android:layout_height="@dimen/icard_gv_spacing"
+           android:layout_centerVertical="true"
+           android:src="@drawable/icard_arrow_left"
+           android:layout_alignParentLeft="true"
+           android:layout_marginLeft="@dimen/icard_left_right_little"
+           />
+        <TextView
+            android:clickable="true"
+            android:id="@+id/icard_order_addresses_cannel"
+            android:layout_marginLeft="@dimen/icard_left_right_big"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cannel"
+            android:textSize="@dimen/icard_text_size_middle"
+            android:textColor="@color/orange"/>
+         </RelativeLayout>
+         <ImageView
+             android:visibility="gone"
+             android:id="@+id/icard_cards_menu"
+             android:layout_width="50dip"
+             android:layout_height="50dip"
+             android:src="@drawable/menu_icon"/>
+         
+         </FrameLayout>
+
+        <RelativeLayout
+            android:clickable="true"
+            android:paddingRight="@dimen/icard_text_padding"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_width="90dip"
+            android:layout_height="wrap_content"
+            android:id="@+id/icard_order_addresses_save">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/icard_left_right_big"
+            android:text="@string/save"
+            android:textSize="@dimen/icard_text_size_middle"
+            android:layout_alignParentRight="true"
+            android:textColor="@color/orange" />
+        <ImageView
+            android:layout_width="@dimen/icard_gv_spacing"
+            android:layout_height="@dimen/icard_gv_spacing"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/icard_left_right_little"
+            android:src="@drawable/icard_arrow_right"/>
+        </RelativeLayout>
+        <TextView
+            android:id="@+id/design_type_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/icard_order_address"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/icard_text_size_big" />
+
+    </RelativeLayout>
+    
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/icard_line"/>
+    
+    <com.istroop.istrooprecognize.SwipeListView
+        android:divider="#50C8C7CC"
+        android:dividerHeight="1dip"
+        android:footerDividersEnabled="false"
+        android:id="@+id/icard_order_addresses_lv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+    
+
+</LinearLayout>

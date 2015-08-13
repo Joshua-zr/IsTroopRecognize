@@ -1,0 +1,88 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gray_white"
+    tools:context="com.istroop.istrooprecognize.activity.FastLoginActivity">
+
+    <TextView
+        android:id="@+id/tv_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        android:text="登录"
+        android:textColor="@color/black"
+        android:textSize="25sp" />
+
+    <TextView
+        android:id="@+id/tv_fast_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="80dp"
+        android:text="快速登录"
+        android:textColor="@color/orange"
+        android:textSize="18sp" />
+
+    <ImageView
+        android:id="@+id/line_up"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_below="@id/tv_fast_login"
+        android:layout_marginLeft="@dimen/line_margin"
+        android:layout_marginRight="@dimen/line_margin"
+        android:layout_marginTop="120dp"
+        android:background="@color/white" />
+
+    <LinearLayout
+        android:id="@+id/ll_login_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="150dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/iv_login_phone"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:src="@drawable/phone128x128" />
+
+        <ImageView
+            android:id="@+id/iv_login_wx"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginLeft="30dp"
+            android:src="@drawable/login_wx" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_no_account"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="250dp"
+        android:text="还没有帐号"
+        android:textColor="@color/orange"
+        android:textSize="16sp" />
+
+    <ImageView
+        android:id="@+id/iv_line_down"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginLeft="@dimen/line_margin"
+        android:layout_marginRight="@dimen/line_margin"
+        android:layout_marginTop="290dp"
+        android:background="@color/white" />
+
+    <Button
+        android:id="@+id/bt_regist"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="330dp"
+        android:background="@color/orange"
+        android:text="立即注册" />
+
+</FrameLayout>

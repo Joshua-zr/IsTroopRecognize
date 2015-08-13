@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/icard_top">
+
+        <RelativeLayout
+            android:id="@+id/design_sig"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:clickable="true"
+            android:paddingLeft="@dimen/icard_text_padding">
+
+            <ImageView
+                android:layout_width="10dip"
+                android:layout_height="10dip"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/icard_left_right_little"
+                android:src="@drawable/icard_arrow_left" />
+
+            <TextView
+                android:id="@+id/icard_register_mobile_cannel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/icard_left_right_big"
+                android:clickable="true"
+                android:text="@string/cannel"
+                android:textColor="@color/orange"
+                android:textSize="@dimen/icard_text_size_middle" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/icard_register_mobile1_next"
+            android:layout_width="90dip"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:clickable="true"
+            android:paddingRight="@dimen/icard_text_padding">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/icard_left_right_big"
+                android:text="@string/icard_register_mobile_next"
+                android:textColor="@color/orange"
+                android:textSize="@dimen/icard_text_size_middle" />
+
+            <ImageView
+                android:layout_width="10dip"
+                android:layout_height="10dip"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/icard_left_right_little"
+                android:src="@drawable/icard_arrow_right" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/icard_register_mobile_findpwd"
+            android:layout_width="99dip"
+            android:layout_height="24dip"
+            android:layout_centerInParent="true"
+            android:background="@drawable/bar_title" />
+
+    </RelativeLayout>
+
+    icard_register_mobile
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/gray_white"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/icard_register_mobile_number"
+            android:layout_width="match_parent"
+            android:layout_height="60dip"
+            android:gravity="center"
+            android:text="@string/icard_register_mobile_input"
+            android:textColor="@color/black"
+            android:textSize="@dimen/icard_text_size_middle" />
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/login_item_height"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/login_item_margin"
+            android:layout_marginRight="@dimen/login_item_margin"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/icard_register_mobile_et"
+                android:layout_width="60dip"
+                android:layout_height="@dimen/login_item_height"
+                android:layout_centerVertical="true"
+                android:background="@android:drawable/editbox_background_normal"
+                android:gravity="center"
+                android:text="+86"
+                android:textSize="@dimen/icard_text_size_middle" />
+
+            <EditText
+                android:id="@+id/icard_register_mobile"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/login_item_height"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="5dip"
+                android:layout_toRightOf="@+id/icard_register_mobile_et"
+                android:background="@android:drawable/editbox_background_normal"
+                android:cursorVisible="true"
+                android:hint="@string/icard_register_mobile"
+                android:inputType="phone"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textSize="@dimen/icard_text_size_middle" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/icard_login_mail_error_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/icard_login_mail_error"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="90dip"
+                android:src="@drawable/icard_login_error" />
+
+            <TextView
+                android:id="@+id/icard_login_mail_error_hint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dip"
+                android:layout_toRightOf="@+id/icard_login_mail_error"
+                android:text="@string/icard_login_mail_error"
+                android:textColor="@color/orange"
+                android:textSize="11sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/icard_login_password_error_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/icard_login_password_error"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="90dip"
+                android:src="@drawable/icard_login_error" />
+
+            <TextView
+                android:id="@+id/icard_login_password_error_hint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dip"
+                android:layout_toRightOf="@+id/icard_login_password_error"
+                android:text="@string/icard_login_password_error"
+                android:textColor="@color/orange"
+                android:textSize="11sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/icard_register_mobile_protocol"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dip"
+            android:gravity="center"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/icard_login_desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/icard_register_desc1"
+                android:textColor="@color/black"
+                android:textSize="7sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/icard_login_desc"
+                android:text="@string/icard_register_desc2"
+                android:textColor="@color/bule"
+                android:textSize="7sp" />
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+</LinearLayout>

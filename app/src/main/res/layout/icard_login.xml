@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/white"
+              android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/icard_top">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:clickable="true"
+            android:paddingLeft="@dimen/icard_text_padding">
+
+            <ImageView
+                android:layout_width="10dip"
+                android:layout_height="10dip"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/icard_left_right_little"
+                android:src="@drawable/icard_arrow_left"/>
+
+            <TextView
+                android:id="@+id/icard_login_cannel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/icard_left_right_big"
+                android:clickable="true"
+                android:text="返回"
+                android:textColor="@color/orange"
+                android:textSize="@dimen/icard_text_size_middle"/>
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/design_type_name"
+            android:layout_width="99dip"
+            android:layout_height="24dip"
+            android:layout_centerInParent="true"
+            android:background="@drawable/bar_title"/>
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/icard_line"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/icard_login_mail_rl"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/login_item_height"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/login_item_margin"
+                android:layout_marginRight="@dimen/login_item_margin"
+                android:layout_marginTop="15dip"
+                android:background="@drawable/edittext1">
+
+                <TextView
+                    android:id="@+id/icard_login_mail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dip"
+                    android:text="账号"
+                    android:textSize="@dimen/icard_text_size_middle"/>
+
+                <EditText
+                    android:id="@+id/icard_login_mail_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dip"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/icard_login_margin_left"
+                    android:layout_marginStart="@dimen/icard_login_margin_left"
+                    android:background="@null"
+                    android:cursorVisible="true"
+                    android:hint="手机号"
+                    android:inputType="phone"
+                    android:singleLine="true"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/gray"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/login_item_height"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/login_item_margin"
+                android:layout_marginRight="@dimen/login_item_margin"
+                android:background="@drawable/edittext3">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
+                    android:text="密码"
+                    android:textSize="@dimen/icard_text_size_middle"/>
+
+                <EditText
+                    android:id="@+id/icard_login_password_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dip"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/icard_login_margin_left"
+                    android:layout_marginStart="@dimen/icard_login_margin_left"
+                    android:background="@null"
+                    android:cursorVisible="true"
+                    android:hint="密码"
+                    android:inputType="textPassword"
+                    android:singleLine="true"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/gray"/>
+            </RelativeLayout>
+
+            <Button
+                android:id="@+id/icard_login_bt"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/login_item_height"
+                android:layout_marginLeft="@dimen/login_item_margin"
+                android:layout_marginRight="@dimen/login_item_margin"
+                android:layout_marginTop="10dip"
+                android:background="@drawable/login_button"
+                android:text="登录"
+                android:textColor="@color/white"
+                android:textSize="@dimen/icard_text_size_big"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dip">
+
+                <RelativeLayout
+                    android:id="@+id/icard_login_error_ll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="@dimen/login_item_margin"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/icard_login_error"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/icard_login_error"/>
+
+                    <TextView
+                        android:id="@+id/icard_login_error_hint"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="5dip"
+                        android:layout_toRightOf="@+id/icard_login_error"
+                        android:text="请输入手机号码或用户名"
+                        android:textColor="@color/orange"
+                        android:textSize="11sp"/>
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/login_item_margin"
+                    android:orientation="horizontal"
+                    android:visibility="invisible">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="登录超级图片账号表示您同意"
+                        android:textColor="@color/black"
+                        android:textSize="7sp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="超级图片协议"
+                        android:textColor="@color/orange"
+                        android:textSize="7sp"/>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/icard_login_findpwd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginEnd="@dimen/login_item_margin"
+                    android:layout_marginRight="@dimen/login_item_margin"
+                    android:gravity="center"
+                    android:text="忘记密码？"
+                    android:textColor="@color/orange"
+                    android:textSize="12sp"/>
+            </RelativeLayout>
+
+            <!--todo 则加微信登录按钮-->
+            <!--<RelativeLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="@dimen/icard_login_other_height"-->
+            <!--android:layout_gravity="center_horizontal"-->
+            <!--android:layout_marginLeft="@dimen/login_item_margin"-->
+            <!--android:layout_marginRight="@dimen/login_item_margin"-->
+            <!--android:gravity="bottom">-->
+
+            <!--<TextView-->
+            <!--android:id="@+id/icard_login_other_tv"-->
+            <!--android:layout_width="@dimen/icard_login_other_tv_width"-->
+            <!--android:layout_height="@dimen/icard_login_other_line_height"-->
+            <!--android:layout_centerHorizontal="true"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:layout_marginBottom="10dip"-->
+            <!--android:background="@drawable/login_other_line"-->
+            <!--android:textSize="@dimen/icard_text_size_middle" />-->
+
+            <!--</RelativeLayout>-->
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/icard_login_select_ll"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="@color/gray_white"
+            android:clickable="true"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <!--<Button-->
+            <!--android:id="@+id/icard_login_select_mail"-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="@dimen/login_item_height"-->
+            <!--android:layout_marginLeft="@dimen/icard_gv_spacing"-->
+            <!--android:layout_marginRight="@dimen/icard_gv_spacing"-->
+            <!--android:layout_marginTop="@dimen/icard_gv_spacing"-->
+            <!--android:background="@drawable/button_white"-->
+            <!--android:gravity="center"-->
+            <!--android:onClick="photo"-->
+            <!--android:text="@string/icard_login_select_mail"-->
+            <!--android:textColor="@color/red"-->
+            <!--android:textSize="@dimen/icard_text_size_middle" />-->
+
+            <Button
+                android:id="@+id/icard_login_select_mobile"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/login_item_height"
+                android:layout_marginLeft="@dimen/icard_gv_spacing"
+                android:layout_marginRight="@dimen/icard_gv_spacing"
+                android:layout_marginTop="@dimen/icard_gv_spacing"
+                android:background="@drawable/button_white"
+                android:gravity="center"
+                android:onClick="album"
+                android:text="手机登录"
+                android:textColor="@color/orange"
+                android:textSize="@dimen/icard_text_size_middle"/>
+
+            <Button
+                android:id="@+id/icard_login_select_cancel"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/login_item_height"
+                android:layout_marginBottom="@dimen/icard_gv_spacing"
+                android:layout_marginLeft="@dimen/icard_gv_spacing"
+                android:layout_marginRight="@dimen/icard_gv_spacing"
+                android:layout_marginTop="@dimen/icard_gv_spacing"
+                android:background="@drawable/button_black"
+                android:gravity="center"
+                android:onClick="quit"
+                android:text="取消"
+                android:textColor="@color/white"
+                android:textSize="@dimen/icard_text_size_middle"/>
+        </LinearLayout>
+
+    </FrameLayout>
+
+</LinearLayout>

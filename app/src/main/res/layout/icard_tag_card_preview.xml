@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:background="@color/white">
+
+        <RelativeLayout
+            android:id="@+id/design_sig"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:clickable="true"
+            android:paddingLeft="5dp">
+
+            <ImageView
+                android:layout_width="10dip"
+                android:layout_height="10dip"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="5dp"
+                android:src="@drawable/icard_arrow_left" />
+
+            <TextView
+                android:id="@+id/icard_tag_preview2_cannel2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dip"
+                android:clickable="true"
+                android:text="取消"
+                android:textColor="@color/orange"
+                android:textSize="18sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/icard_tag_card_save"
+            android:layout_width="130dip"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:clickable="true"
+            android:paddingRight="5dip">
+            <!--         <ImageButton
+                        android:background="@null"
+                        android:id="@+id/icard_tag_preview2_more2"
+                        android:layout_width="60dip"
+                        android:layout_height="40dip"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="@dimen/icard_left_right_little"
+                        android:src="@drawable/icard_preview_more"/> -->
+            <TextView
+                android:id="@+id/icard_tag_preview2_rightTv"
+                android:layout_width="150dip"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="5dip"
+                android:gravity="right"
+                android:text="保存到通讯录"
+                android:textColor="@color/orange"
+                android:textSize="18sp" />
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="名片"
+            android:textColor="@color/black"
+            android:textSize="24sp" />
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white">
+
+            <RelativeLayout
+                android:id="@+id/icard_tag_card_preview2_rela"
+                android:layout_width="130dip"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true">
+
+                <ImageView
+                    android:id="@+id/icard_tag_preview2_head"
+                    android:layout_width="65dip"
+                    android:layout_height="65dip"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="20dp"
+                    android:scaleType="fitCenter" />
+
+                <TextView
+                    android:id="@+id/icard_tag_preview2_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/icard_tag_preview2_head"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dip"
+                    android:text="居珠"
+                    android:textColor="@color/black"
+                    android:textSize="24sp" />
+
+                <TextView
+                    android:id="@+id/icard_tag_preview2_job"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/icard_tag_preview2_name"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="10dip"
+                    android:text="产品经理"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/icard_tag_preview2_ing"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/icard_tag_card_preview2_rela"
+                android:layout_marginTop="10dip">
+
+                <ImageButton
+                    android:id="@+id/icard_tag_preview2_mobiel_ing"
+                    android:layout_width="20dip"
+                    android:layout_height="20dip"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="20dip"
+                    android:background="@drawable/icard_preview_mobile" />
+
+                <ImageButton
+                    android:id="@+id/icard_tag_preview2_sms_ing"
+                    android:layout_width="20dip"
+                    android:layout_height="20dip"
+                    android:layout_marginLeft="20dp"
+                    android:layout_toRightOf="@+id/icard_tag_preview2_mobiel_ing"
+                    android:background="@drawable/icard_preview_sms" />
+
+                <ImageButton
+                    android:id="@+id/icard_tag_preview2_mail_ing"
+                    android:layout_width="20dip"
+                    android:layout_height="20dip"
+                    android:layout_marginLeft="20dip"
+                    android:layout_toRightOf="@+id/icard_tag_preview2_sms_ing"
+                    android:background="@drawable/icard_preview_mail" />
+            </RelativeLayout>
+
+
+            <ImageView
+                android:id="@+id/icard_tag_preview2_bar"
+                android:layout_width="140dip"
+                android:layout_height="35dip"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/icard_tag_preview2_ing"
+                android:layout_marginLeft="20dip"
+                android:layout_marginTop="5dip"
+                android:src="@drawable/icard_card_bg_bar" />
+
+            <TextView
+                android:id="@+id/icard_tag_preview2_company"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/icard_tag_preview2_bar"
+                android:layout_marginLeft="@dimen/icard_left_right_big"
+                android:layout_marginTop="@dimen/icard_left_right_little"
+                android:text="北京中盈信安科技发展有限责任公司"
+                android:textColor="@color/black"
+                android:textSize="@dimen/icard_text_size_big" />
+
+            <TextView
+                android:id="@+id/icard_tag_preview2_index"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/icard_tag_preview2_company"
+                android:layout_marginBottom="@dimen/icard_top_margin"
+                android:layout_marginLeft="@dimen/icard_left_right_big"
+                android:layout_marginTop="@dimen/icard_left_right_little"
+                android:text="www.ichaotu.com"
+                android:textColor="@color/black"
+                android:textSize="@dimen/icard_text_size_little" />
+
+            <TextView
+                android:id="@+id/icard_tag_preview2_weixin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/icard_tag_preview2_index"
+                android:layout_marginLeft="@dimen/icard_left_right_big"
+                android:layout_marginTop="@dimen/icard_left_right_little"
+                android:text="W:ybb_flowmymay(微信)"
+                android:textSize="@dimen/icard_text_size_middle" />
+
+            <TextView
+                android:id="@+id/icard_tag_preview2_mobile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/icard_tag_preview2_weixin"
+                android:layout_marginLeft="@dimen/icard_left_right_big"
+                android:layout_marginTop="@dimen/icard_left_right_little"
+                android:text="M:+86 137 1233 2233"
+                android:textSize="@dimen/icard_text_size_middle" />
+
+            <TextView
+                android:id="@+id/icard_tag_preview2_mail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/icard_tag_preview2_mobile"
+                android:layout_marginLeft="@dimen/icard_left_right_big"
+                android:layout_marginTop="@dimen/icard_left_right_little"
+                android:text="E:juzhu@ichaotu.com"
+                android:textSize="@dimen/icard_text_size_middle" />
+
+            <TextView
+                android:id="@+id/icard_tag_preview2_address2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/icard_tag_preview2_mail"
+                android:layout_marginBottom="40dip"
+                android:layout_marginLeft="@dimen/icard_left_right_big"
+                android:layout_marginRight="@dimen/icard_left_right_big"
+                android:layout_marginTop="@dimen/icard_left_right_little"
+                android:text="D.超级图片是国内首家基于信息隐藏技术的超级图片创建平台,您可以把图片、文字、链接、位置信息、声音、视频等嵌入图片之中,可标记在图片的任意位置,将普通图片创建为超级图片,无论您的图片转发到任一个地方,被裁剪、PS还是截屏,您的信息将和图片一起流转不丢失"
+                android:textSize="@dimen/icard_text_size_middle" />
+
+        </RelativeLayout>
+    </ScrollView>
+
+</LinearLayout>

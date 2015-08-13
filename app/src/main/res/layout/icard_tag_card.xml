@@ -1,0 +1,508 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gray_white"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/icard_top"
+        android:background="@color/white">
+
+        <RelativeLayout
+            android:id="@+id/icard_card_cancel_rl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:paddingLeft="@dimen/icard_text_padding">
+
+
+            <RelativeLayout
+                android:id="@+id/icard_card_rl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:clickable="true"
+                android:paddingLeft="@dimen/icard_text_padding">
+
+                <ImageView
+                    android:layout_width="@dimen/icard_gv_spacing"
+                    android:layout_height="@dimen/icard_gv_spacing"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/icard_left_right_little"
+                    android:src="@drawable/icard_arrow_left" />
+
+                <TextView
+                    android:id="@+id/icard_tag_card_cannel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/icard_left_right_big"
+                    android:clickable="true"
+                    android:text="@string/cannel"
+                    android:textColor="@color/orange"
+                    android:textSize="@dimen/icard_text_size_middle" />
+            </RelativeLayout>
+
+            <ImageView
+                android:id="@+id/icard_card_menu"
+                android:layout_width="20dip"
+                android:layout_height="20dip"
+                android:layout_marginLeft="10dip"
+                android:src="@drawable/menu_icon"
+                android:visibility="gone" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/icard_tag_card_save"
+            android:layout_width="100dip"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:clickable="true"
+            android:paddingRight="@dimen/icard_text_padding">
+
+            <TextView
+                android:id="@+id/icard_tag_card_save_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/icard_left_right_big"
+                android:text="@string/save"
+                android:textColor="@color/orange"
+                android:textSize="@dimen/icard_text_size_middle" />
+
+            <ImageView
+                android:layout_width="@dimen/icard_gv_spacing"
+                android:layout_height="@dimen/icard_gv_spacing"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/icard_left_right_little"
+                android:src="@drawable/icard_arrow_right" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/icard_tag_card_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/icard_tag_card_set"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/icard_text_size_big" />
+
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/icard_line" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/icard_left_right_little"
+                android:background="@color/gray_white"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icard_line" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/icard_top"
+                    android:background="@color/white"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/icard_order_address_man_tv"
+                        android:layout_width="80dip"
+                        android:layout_height="44dip"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/icard_two_card_name"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/icard_text_size_middle" />
+
+                    <EditText
+                        android:id="@+id/icard_tag_card_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="@dimen/icard_tag_card_left"
+                        android:background="@null"
+                        android:hint="@string/icard_order_address_man_hint"
+                        android:singleLine="true"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/icard_text_size_middle" />
+
+                </RelativeLayout>
+
+                <ImageView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icard_line" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/icard_top"
+                    android:background="@color/white"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/icard_order_address_man_tv_a"
+                        android:layout_width="80dip"
+                        android:layout_height="44dip"
+                        android:background="@drawable/icard_two_card_mobile"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/icard_text_size_middle" />
+
+                    <EditText
+                        android:id="@+id/icard_tag_card_mobile"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="@dimen/icard_tag_card_left"
+                        android:background="@null"
+                        android:hint="@string/icard_tag_card_mobile_hint"
+                        android:singleLine="true"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/icard_text_size_middle" />
+
+                </RelativeLayout>
+
+                <ImageView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icard_line" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/icard_top"
+                    android:background="@color/white"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/icard_order_address_man_tv_b"
+                        android:layout_width="80dip"
+                        android:layout_height="44dip"
+                        android:background="@drawable/icard_two_card_mail"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/icard_text_size_middle" />
+
+                    <EditText
+                        android:id="@+id/icard_tag_card__mail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="@dimen/icard_tag_card_left"
+                        android:background="@null"
+                        android:hint="@string/icard_tag_card_mail_hint"
+                        android:singleLine="true"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/icard_text_size_middle" />
+
+                </RelativeLayout>
+
+                <ImageView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icard_line" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/icard_left_right_little"
+                android:background="@color/gray_white"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icard_line" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/icard_top"
+                    android:background="@color/white"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/icard_order_address_man_tv_c"
+                        android:layout_width="80dip"
+                        android:layout_height="44dip"
+                        android:background="@drawable/icard_two_card_factory"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/icard_text_size_middle" />
+
+                    <EditText
+                        android:id="@+id/icard_tag_card_conpany"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="@dimen/icard_tag_card_left"
+                        android:background="@null"
+                        android:hint="@string/icard_tag_card_company_hint"
+                        android:singleLine="true"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/icard_text_size_middle" />
+
+                </RelativeLayout>
+
+                <ImageView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icard_line" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/icard_top"
+                    android:background="@color/white"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/icard_order_address_man_tv_d"
+                        android:layout_width="80dip"
+                        android:layout_height="44dip"
+                        android:background="@drawable/icard_two_card_part"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/icard_text_size_middle" />
+
+                    <EditText
+                        android:id="@+id/icard_tag_card_part"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="@dimen/icard_tag_card_left"
+                        android:background="@null"
+                        android:hint="@string/icard_tag_card_part_hint"
+                        android:singleLine="true"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/icard_text_size_middle" />
+
+                </RelativeLayout>
+
+                <ImageView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icard_line" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/icard_top"
+                    android:background="@color/white"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/icard_order_address_man_tv_e"
+                        android:layout_width="80dip"
+                        android:layout_height="44dip"
+                        android:background="@drawable/icard_two_card_job"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/icard_text_size_middle" />
+
+                    <EditText
+                        android:id="@+id/icard_tag_card_job"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="@dimen/icard_tag_card_left"
+                        android:background="@null"
+                        android:hint="@string/icard_tag_card_job_hint"
+                        android:singleLine="true"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/icard_text_size_middle" />
+
+                </RelativeLayout>
+
+                <ImageView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icard_line" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/icard_left_right_little"
+                android:background="@color/gray_white"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icard_line" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/icard_top"
+                    android:background="@color/white"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/icard_order_address_man_tv_f"
+                        android:layout_width="80dip"
+                        android:layout_height="44dip"
+                        android:background="@drawable/icard_two_card_index"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/icard_text_size_middle" />
+
+                    <EditText
+                        android:id="@+id/icard_tag_card_index"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="@dimen/icard_tag_card_left"
+                        android:background="@null"
+                        android:hint="@string/icard_tag_card_index_hint"
+                        android:singleLine="true"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/icard_text_size_middle" />
+
+                </RelativeLayout>
+
+                <ImageView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icard_line" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/icard_top"
+                    android:background="@color/white"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/icard_order_address_man_tv_g"
+                        android:layout_width="80dip"
+                        android:layout_height="44dip"
+                        android:background="@drawable/icard_two_card_address"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/icard_text_size_middle" />
+
+                    <EditText
+                        android:id="@+id/icard_tag_card_address"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="@dimen/icard_tag_card_left"
+                        android:background="@null"
+                        android:hint="@string/icard_tag_card_address_hint"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/icard_text_size_middle" />
+
+                </RelativeLayout>
+
+                <ImageView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icard_line" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/icard_left_right_little"
+                android:background="@color/gray_white"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icard_line" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/icard_top"
+                    android:background="@color/white"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/icard_order_address_man_tv_h"
+                        android:layout_width="80dip"
+                        android:layout_height="44dip"
+                        android:background="@drawable/icard_two_card_signature"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/icard_text_size_middle" />
+
+                    <EditText
+                        android:id="@+id/icard_tag_card_signature"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="@dimen/icard_tag_card_left"
+                        android:background="@null"
+                        android:hint="@string/icard_tag_card_signature_hint"
+                        android:singleLine="true"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/icard_text_size_middle" />
+
+                </RelativeLayout>
+
+                <ImageView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icard_line" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/icard_top"
+                    android:background="@color/white"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/icard_order_address_man_tv_i"
+                        android:layout_width="80dip"
+                        android:layout_height="44dip"
+                        android:background="@drawable/icard_two_card_weixin"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/icard_text_size_middle" />
+
+                    <EditText
+                        android:id="@+id/icard_tag_card_weixin"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="@dimen/icard_tag_card_left"
+                        android:background="@null"
+                        android:hint="@string/icard_tag_card_weixin_hint"
+                        android:singleLine="true"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/icard_text_size_middle" />
+
+                </RelativeLayout>
+
+                <ImageView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icard_line" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/icard_tag_card_preview"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/icard_top"
+                android:gravity="center"
+                android:text="@string/icard_tag_card_preview" />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
