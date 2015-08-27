@@ -7,7 +7,7 @@
     <dimen name="icard_left_right_little">5dp</dimen>
     <dimen name="icard_text_size_big">24sp</dimen>
     <dimen name="icard_top_margin">10dp</dimen>
-    <dimen name="icard_text_size_little">15dp</dimen>
+    <dimen name="icard_text_size_little">15sp</dimen>
     <dimen name="icard_text_size_middle">18sp</dimen>
     <dimen name="icard_gv_spacing">10dp</dimen>
     <dimen name="icard_pic_button_width">91dp</dimen>

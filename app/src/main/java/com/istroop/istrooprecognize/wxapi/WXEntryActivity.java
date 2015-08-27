@@ -8,7 +8,7 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import com.istroop.istrooprecognize.IstroopConstants;
-import com.istroop.istrooprecognize.activity.MainActivity;
+import com.istroop.istrooprecognize.ui.activity.MainActivity;
 import com.istroop.istrooprecognize.bean.User;
 import com.istroop.istrooprecognize.utils.HttpTools;
 import com.istroop.istrooprecognize.utils.Utils;

@@ -7,7 +7,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.2.3'
+        classpath 'com.android.tools.build:gradle:1.3.0'
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4'
         classpath 'me.tatarka:gradle-retrolambda:3.2.0'
     }
@@ -18,8 +18,8 @@ repositories {
 }
 
 android {
-    compileSdkVersion 21
-    buildToolsVersion "21.1.2"
+    compileSdkVersion 22
+    buildToolsVersion "22.0.1"
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -49,7 +49,7 @@ android {
     defaultConfig {
         applicationId "com.istroop.istrooprecognize"
         minSdkVersion 15
-        targetSdkVersion 21
+        targetSdkVersion 22
         versionCode 11
         versionName "2.5.1"
     }
@@ -71,12 +71,15 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:22.2.1'
-    compile project(':superImageSDK')
+    compile 'com.jakewharton:butterknife:7.0.1'
+    compile 'com.squareup.okhttp:okhttp:2.4.0'
+    compile 'com.squareup:otto:1.3.8'
     compile files('libs/libammsdk.jar')
     compile files('libs/xUtils-2.6.14.jar')
     compile files('libs/apache-mime4j-0.6.jar')
     compile files('libs/httpmime-4.0.jar')
     compile files('libs/stetho-1.1.1-fatjar.jar')
+    compile project(':superImageSDK')
 }

@@ -1,131 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest
-    package="com.istroop.istrooprecognize"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:versionCode="11"
-    android:versionName="2.5.1">
+	package="com.istroop.istrooprecognize"
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:versionCode="11"
+	android:versionName="2.5.1">
 
-    <uses-sdk
-        android:maxSdkVersion="18"
-        android:minSdkVersion="15"
-        android:targetSdkVersion="21"/>
+	<uses-sdk
+		android:maxSdkVersion="18"
+		android:minSdkVersion="15"
+		android:targetSdkVersion="21"/>
 
-    <uses-feature android:name="android.hardware.camera"/>
-    <uses-feature android:name="android.hardware.camera.autofocus"/>
+	<uses-feature android:name="android.hardware.camera"/>
+	<uses-feature android:name="android.hardware.camera.autofocus"/>
 
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.VIBRATE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
+	<uses-permission android:name="android.permission.CAMERA"/>
+	<uses-permission android:name="android.permission.VIBRATE"/>
+	<uses-permission android:name="android.permission.INTERNET"/>
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+	<uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+	<uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
 
-    <application
-        android:allowBackup="true"
-        android:icon="@drawable/newicon"
-        android:debuggable="true"
-        android:label="@string/app_name">
-        <activity
-            android:name=".activity.MainActivity"
-            android:label="@string/app_name"
-            android:theme="@android:style/Theme.NoTitleBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+	<application
+		android:allowBackup="true"
+		android:icon="@drawable/newicon"
+		android:label="@string/app_name">
+		<activity
+			android:name=".ui.activity.MainActivity"
+			android:label="@string/app_name"
+			android:theme="@android:style/Theme.NoTitleBar">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
-        </activity>
-        <activity android:name=".activity.InfoActivity"/>
-        <activity
-            android:name=".activity.RecoActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar"/>
-        <activity
-            android:name=".activity.HistoryActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar"/>
-        <activity
-            android:name=".activity.ICardMapActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar"/>
-        <activity
-            android:name=".activity.ICardTagPreview"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar"/>
-        <activity
-            android:name=".activity.ImagePagerActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar"/>
-        <activity
-            android:name=".activity.RecoDetailEditionActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar"/>
-        <activity
-            android:name=".activity.RecoDetailMapActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar"/>
-        <activity
-            android:name=".activity.RecoDetailPicActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar"/>
-        <activity
-            android:name=".activity.RecoDetailTextActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar"/>
-        <activity
-            android:name=".activity.RecoDetailWebActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar"/>
-        <activity
-            android:name=".activity.ICardLoginActivtiy"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar"/>
-        <activity
-            android:name=".activity.ICardRegisterActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar"/>
-        <activity
-            android:name=".activity.ICardRegistreMobileActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar"/>
-        <activity
-            android:name=".activity.ICardRegistreMobileActivity2"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar"/>
-        <activity
-            android:name=".activity.ICardTagCardActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar"/>
-        <activity
-            android:name=".activity.ICardTagCardsActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar"/>
-        <activity
-            android:name=".activity.ICardTagDescActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar"/>
-        <activity
-            android:name=".activity.ICardTagVideoMapActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar"/>
-        <activity
-            android:name=".activity.ActionSheet"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar"/>
-        <activity
-            android:name=".wxapi.WXEntryActivity"
-            android:exported="true"
-            android:label="@string/app_name"
-            android:theme="@android:style/Theme.NoTitleBar"/>
-        <activity
-            android:name=".activity.FastLoginActivity"
-            android:label="@string/title_activity_fast_login"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar"/>
-    </application>
+				<category android:name="android.intent.category.LAUNCHER"/>
+			</intent-filter>
+		</activity>
+		<activity android:name=".ui.activity.InfoActivity"/>
+		<activity
+			android:name=".ui.activity.RecoActivity"
+			android:screenOrientation="portrait"
+			android:theme="@android:style/Theme.NoTitleBar"/>
+		<activity
+			android:name=".ui.activity.HistoryActivity"
+			android:screenOrientation="portrait"
+			android:theme="@android:style/Theme.NoTitleBar"/>
+		<activity
+			android:name=".ui.activity.ICardMapActivity"
+			android:screenOrientation="portrait"
+			android:theme="@android:style/Theme.NoTitleBar"/>
+		<activity
+			android:name=".ui.activity.ICardTagPreview"
+			android:screenOrientation="portrait"
+			android:theme="@android:style/Theme.NoTitleBar"/>
+		<activity
+			android:name=".ui.activity.ImagePagerActivity"
+			android:screenOrientation="portrait"
+			android:theme="@android:style/Theme.NoTitleBar"/>
+		<activity
+			android:name=".ui.activity.RecoDetailEditionActivity"
+			android:screenOrientation="portrait"
+			android:theme="@android:style/Theme.NoTitleBar"/>
+		<activity
+			android:name=".ui.activity.RecoDetailMapActivity"
+			android:screenOrientation="portrait"
+			android:theme="@android:style/Theme.NoTitleBar"/>
+		<activity
+			android:name=".ui.activity.RecoDetailPicActivity"
+			android:screenOrientation="portrait"
+			android:theme="@android:style/Theme.NoTitleBar"/>
+		<activity
+			android:name=".ui.activity.RecoDetailTextActivity"
+			android:screenOrientation="portrait"
+			android:theme="@android:style/Theme.NoTitleBar"/>
+		<activity
+			android:name=".ui.activity.RecoDetailWebActivity"
+			android:screenOrientation="portrait"
+			android:theme="@android:style/Theme.NoTitleBar"/>
+		<activity
+			android:name=".ui.activity.ICardLoginActivtiy"
+			android:screenOrientation="portrait"
+			android:theme="@android:style/Theme.NoTitleBar"/>
+		<activity
+			android:name=".ui.activity.ICardRegisterActivity"
+			android:screenOrientation="portrait"
+			android:theme="@android:style/Theme.NoTitleBar"/>
+		<activity
+			android:name=".ui.activity.ICardRegistreMobileActivity"
+			android:screenOrientation="portrait"
+			android:theme="@android:style/Theme.NoTitleBar"/>
+		<activity
+			android:name=".ui.activity.ICardRegistreMobileActivity2"
+			android:screenOrientation="portrait"
+			android:theme="@android:style/Theme.NoTitleBar"/>
+		<activity
+			android:name=".ui.activity.ICardTagCardActivity"
+			android:screenOrientation="portrait"
+			android:theme="@android:style/Theme.NoTitleBar"/>
+		<activity
+			android:name=".ui.activity.ICardTagCardsActivity"
+			android:screenOrientation="portrait"
+			android:theme="@android:style/Theme.NoTitleBar"/>
+		<activity
+			android:name=".ui.activity.ICardTagDescActivity"
+			android:screenOrientation="portrait"
+			android:theme="@android:style/Theme.NoTitleBar"/>
+		<activity
+			android:name=".ui.activity.ICardTagVideoMapActivity"
+			android:screenOrientation="portrait"
+			android:theme="@android:style/Theme.NoTitleBar"/>
+		<activity
+			android:name=".ui.activity.ActionSheet"
+			android:screenOrientation="portrait"
+			android:theme="@android:style/Theme.NoTitleBar"/>
+		<activity
+			android:name=".wxapi.WXEntryActivity"
+			android:exported="true"
+			android:label="@string/app_name"
+			android:theme="@android:style/Theme.NoTitleBar"/>
+		<activity
+			android:name=".ui.activity.FastLoginActivity"
+			android:label="@string/title_activity_fast_login"
+			android:screenOrientation="portrait"
+			android:theme="@android:style/Theme.NoTitleBar"/>
+
+	</application>
 
 </manifest>

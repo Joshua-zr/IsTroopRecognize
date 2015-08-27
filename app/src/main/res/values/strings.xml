@@ -172,4 +172,14 @@
     <string name="alumb">相册</string>
     <string name="title_activity_collapse">CollapseActivity</string>
 
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="no_his">无扫描记录</string>
+    <string name="scan">扫一扫</string>
+    <string name="scan_line">扫描线</string>
+    <string name="即可识别嵌入的内容">即可识别嵌入的内容</string>
+    <string name="aim_target">请将摄像头对准含有【超级图片】标识的图片</string>
+    <string name="near_easy_scan">靠近一点更容易识别噢~</string>
+    <string name="title_activity_main2">Main2Activity</string>
+
 </resources>

@@ -1,131 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/white"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:textSize="12sp"
-                tools:context="com.istroop.activity.RecoActivity">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:background="@color/white"
+             tools:context="com.istroop.activity.RecoActivity">
 
-    <FrameLayout
-        android:id="@+id/reco_fl"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+	<TextView
+		android:id="@+id/menu_icon"
+		android:layout_width="80dp"
+		android:layout_height="50dp"
+		android:layout_gravity="end"
+		android:gravity="center"
+		android:text="@string/alumb"
+		android:textColor="@color/orange"
+		android:textSize="18sp"/>
 
-        <RelativeLayout
-            android:id="@+id/camera_preview"
-            android:layout_width="match_parent"
-            android:layout_height="fill_parent"></RelativeLayout>
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="50dp"
+		android:layout_gravity="center_horizontal"
+		android:gravity="center"
+		android:text="@string/scan"
+		android:textColor="@color/black"
+		android:textSize="20sp"/>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="50dp"
-            android:background="@drawable/reco_kuang"></RelativeLayout>
+	<SurfaceView
+		android:id="@+id/camera_preview"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_marginTop="50dp"/>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="65dp"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp"
-            android:layout_marginTop="80dp">
+	<FrameLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_marginTop="50dp"
+		android:background="@drawable/reco_kuang">
 
-            <ImageView
-                android:id="@+id/reco_line"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="10dip"
-                android:paddingRight="10dip"
-                android:src="@drawable/reco_line"/>
-        </RelativeLayout>
+		<ImageView
+			android:id="@+id/reco_line"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="10dp"
+			android:contentDescription="@string/scan_line"
+			android:paddingLeft="10dip"
+			android:paddingRight="10dip"
+			android:src="@drawable/reco_line"/>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+	</FrameLayout>
 
-            <RelativeLayout
-                android:layout_width="fill_parent"
-                android:layout_height="50dp"
-                android:background="@color/white">
+	<Button
+		android:id="@+id/flashBtn"
+		android:layout_width="30dip"
+		android:layout_height="30dip"
+		android:layout_gravity="end"
+		android:layout_marginEnd="30dp"
+		android:layout_marginRight="30dp"
+		android:layout_marginTop="80dp"
+		android:background="@drawable/torch_off"/>
 
-                <TextView
-                    android:id="@+id/menu_icon"
-                    android:layout_width="80dp"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:gravity="center"
-                    android:text="@string/alumb"
-                    android:textColor="@color/orange"
-                    android:textSize="18sp"/>
+	<TextView
+		android:id="@+id/reco_desText"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="bottom|center_horizontal"
+		android:layout_marginBottom="55dp"
+		android:text="@string/即可识别嵌入的内容"
+		android:textColor="#ffffff"
+		android:textSize="12sp"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:text="扫一扫"
-                    android:textColor="@color/black"
-                    android:textSize="20sp"/>
-            </RelativeLayout>
+	<TextView
+		android:id="@+id/reco_downText"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="bottom|center_horizontal"
+		android:layout_marginBottom="70dp"
+		android:text="@string/aim_target"
+		android:textColor="#ffffff"
+		android:textSize="12sp"/>
 
-            <Button
-                android:id="@+id/lightBtn"
-                android:layout_width="30dip"
-                android:layout_height="30dip"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="30dp"
-                android:layout_marginTop="90dp"
-                android:background="@drawable/torch_on"/>
+	<ProgressBar
+		android:id="@+id/centerPro"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="center"
+		android:indeterminateBehavior="repeat"
+		android:indeterminateDrawable="@drawable/progressbar"
+		android:indeterminateOnly="true"/>
 
-            <TextView
-                android:id="@+id/reco_desText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="55dp"
-                android:text="即可识别嵌入的内容"
-                android:textColor="#ffffff"
-                android:textSize="12sp"/>
+	<TextView
+		android:id="@+id/reco_detail"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="center"
+		android:text="@string/near_easy_scan"/>
 
-            <TextView
-                android:id="@+id/reco_downText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="70dp"
-                android:text="请将摄像头对准含有【超级图片】标识的图片"
-                android:textColor="#ffffff"
-                android:textSize="12sp"/>
-
-            <ProgressBar
-                android:id="@+id/centerPro"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:indeterminateBehavior="repeat"
-                android:indeterminateDrawable="@drawable/progressbar"
-                android:indeterminateOnly="true"/>
-
-            <TextView
-                android:id="@+id/reco_detail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:text="靠近一点更容易识别噢~"/>
-        </RelativeLayout>
-
-<!--        <SeekBar
-            android:id="@+id/sb"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"/>-->
-
-    </FrameLayout>
-
-</RelativeLayout>
+</FrameLayout>
