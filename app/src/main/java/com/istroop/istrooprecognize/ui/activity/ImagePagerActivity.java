@@ -27,6 +27,7 @@ import com.istroop.istrooprecognize.utils.HackyViewPager;
 import com.istroop.istrooprecognize.utils.HttpTools;
 import com.istroop.istrooprecognize.utils.ImageAsyncTask;
 import com.istroop.istrooprecognize.utils.PhotoView;
+import com.istroop.istrooprecognize.utils.Utils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -37,8 +38,9 @@ import java.util.Locale;
 
 public class ImagePagerActivity extends BaseActivity implements OnClickListener {
 
-    protected static final int IMAGE_PAGER_SUCCESS = 1;
-    protected static final int IMAGE_PAGER_FAIL    = 2;
+    private static final   String TAG                 = ImagePagerActivity.class.getSimpleName();
+    protected static final int    IMAGE_PAGER_SUCCESS = 1;
+    protected static final int    IMAGE_PAGER_FAIL    = 2;
     private LinearLayout image_pager_ll;
     HackyViewPager pager;
     private ImagePagerHandler handler = new ImagePagerHandler();
@@ -49,6 +51,7 @@ public class ImagePagerActivity extends BaseActivity implements OnClickListener 
         setContentView( R.layout.image_pager );
         String picUrl = getIntent().getExtras().getString( "picUrl" );
         String number = getIntent().getExtras().getString( "number" );
+        Utils.log( TAG, "picUrl:" + picUrl + "   number:" + number, 5 );
         String[] split = new String[0];
         if ( picUrl != null ) {
             split = picUrl.split( ".jpg" );

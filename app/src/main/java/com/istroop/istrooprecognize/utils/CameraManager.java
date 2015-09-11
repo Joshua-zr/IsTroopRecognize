@@ -1,6 +1,5 @@
 package com.istroop.istrooprecognize.utils;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.ImageFormat;
 import android.graphics.Point;
@@ -10,7 +9,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.SurfaceHolder;
 
-import com.istroop.istrooprecognize.IstroopConstants;
+import com.istroop.istrooprecognize.WMDetectorThread;
 
 import java.io.IOException;
 import java.util.List;
@@ -26,25 +25,6 @@ public class CameraManager {
         Camera c;
         c = Camera.open();
         return c;
-    }
-
-    public static void initCamera( Camera mCamera ) {
-        Camera.Parameters mParam = mCamera.getParameters();
-        mCamera.setDisplayOrientation( 90 );
-        selectMaxPreviewSize( mParam );
-        mParam.setPreviewSize( mPreviewWidth, mPreviewHeight );
-        if ( isFocusModeSupported( mParam,
-                                   Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE ) ) {
-            mParam.setFocusMode( Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE );
-        } else if ( isFocusModeSupported( mParam,
-                                          Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO ) ) {
-            mParam.setFocusMode( Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO );
-        } else if ( isFocusModeSupported( mParam,
-                                          Camera.Parameters.FOCUS_MODE_AUTO ) ) {
-            mParam.setFocusMode( Camera.Parameters.FOCUS_MODE_AUTO );
-        }
-        mParam.setPreviewFormat( ImageFormat.NV21 );
-        mCamera.setParameters( mParam );
     }
 
     private static void selectMaxPreviewSize( Camera.Parameters params ) {
@@ -78,19 +58,21 @@ public class CameraManager {
     private       boolean                    initialized;
     private       boolean                    previewing;
     private int requestedCameraId = OpenCameraInterface.NO_REQUESTED_CAMERA;
-    private int           requestedFramingRectWidth;
-    private int           requestedFramingRectHeight;
-    private Handler       handler;
+    private int              requestedFramingRectWidth;
+    private int              requestedFramingRectHeight;
+    private Handler          handler;
+    private WMDetectorThread wmDetectorThread;
     /**
      * Preview frames are delivered here, which we pass on to the registered handler. Make sure to
      * clear the handler so it will only receive one message.
      */
-    private CameraPreview previewCallback;
+    private CameraPreview    previewCallback;
 
-    public CameraManager( Context context, Handler handler ) {
+    public CameraManager( Context context, Handler handler, WMDetectorThread wmDetectorThread ) {
         this.context = context;
         this.handler = handler;
         this.configManager = new CameraConfigurationManager( context );
+        this.wmDetectorThread = wmDetectorThread;
     }
 
     /**
@@ -126,6 +108,7 @@ public class CameraManager {
         parameters.setPreviewSize( mPreviewWidth, mPreviewHeight );
         Utils.log( TAG, "mWidth:" + mPreviewWidth + "   mHeight:" + mPreviewHeight, 6 );
         parameters.setPreviewFormat( ImageFormat.NV21 );
+        theCamera.setParameters( parameters );
         try {
             configManager.setDesiredCameraParameters( theCamera, false );
         } catch ( RuntimeException re ) {
@@ -143,8 +126,8 @@ public class CameraManager {
                 Log.w( TAG, "Camera rejected even safe-mode parameters! No configuration" );
             }
         }
-        previewCallback = new CameraPreview( ( Activity ) context, configManager,
-                                             handler, mPreviewWidth, mPreviewHeight );
+        previewCallback = new CameraPreview(
+                mPreviewWidth, mPreviewHeight, wmDetectorThread );
     }
 
     public synchronized boolean isOpen() {
@@ -343,11 +326,13 @@ public class CameraManager {
         if ( camera != null ) {
             Camera.Parameters mParam = camera.getParameters();
             if ( Camera.Parameters.FLASH_MODE_OFF.equals( mParam.getFlashMode() ) ) {
+                Utils.log( TAG, "开启闪光灯", 5 );
                 mParam.setFlashMode( Camera.Parameters.FLASH_MODE_TORCH );
                 camera.setParameters( mParam );
                 return true;
             } else if ( Camera.Parameters.FLASH_MODE_TORCH.equals( mParam.getFlashMode() ) ) {
                 mParam.setFlashMode( Camera.Parameters.FLASH_MODE_OFF );
+                Utils.log( TAG, "关闭闪光灯", 5 );
                 camera.setParameters( mParam );
                 return false;
             }

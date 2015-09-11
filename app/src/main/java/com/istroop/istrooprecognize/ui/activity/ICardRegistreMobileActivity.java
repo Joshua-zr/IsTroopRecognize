@@ -28,10 +28,11 @@ import java.io.IOException;
 public class ICardRegistreMobileActivity extends BaseActivity implements
         OnClickListener {
 
-    protected static final String TAG                    = "ICardRegistreMobileActivity";
-    protected static final int    REGISTER_SEND_SUCCESS  = 1;
-    protected static final int    ICARD_REGISTER_MOBILE1 = 2;
-    protected static final int    REGISTER_SEND_FAIL     = 3;
+    protected static final String TAG = "ICardRegistreMobileActivity";
+
+    protected static final int REGISTER_SEND_SUCCESS  = 1;
+    protected static final int ICARD_REGISTER_MOBILE1 = 2;
+    protected static final int REGISTER_SEND_FAIL     = 3;
     private EditText icard_register_mobile;
     private String   mobile_findpwd;
     private String   code;

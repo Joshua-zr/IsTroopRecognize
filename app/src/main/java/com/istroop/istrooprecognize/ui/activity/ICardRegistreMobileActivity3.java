@@ -16,7 +16,6 @@ import com.istroop.istrooprecognize.BaseActivity;
 import com.istroop.istrooprecognize.IstroopConstants;
 import com.istroop.istrooprecognize.R;
 import com.istroop.istrooprecognize.utils.HttpTools;
-import com.istroop.istrooprecognize.utils.TypeUtil;
 import com.istroop.istrooprecognize.utils.Utils;
 import com.istroop.istrooprecognize.utils.WidgetUtil;
 
@@ -96,7 +95,7 @@ public class ICardRegistreMobileActivity3 extends BaseActivity implements
                                     R.string.icard_login_password_error ), Toast.LENGTH_SHORT ).show();
                     return;
                 }
-                if ( !TypeUtil.isPassword( pwd ) ) {
+                if ( !Utils.isPassword( pwd ) ) {
                     icard_register_mobile3_pwd_hint.setVisibility( View.VISIBLE );
                     return;
                 }

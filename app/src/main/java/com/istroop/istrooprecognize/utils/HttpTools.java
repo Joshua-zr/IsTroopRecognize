@@ -120,7 +120,7 @@ public class HttpTools {
     }
 
     public static String login( String url, CookieStore cookieStore ) {
-        url = TypeUtil.remove( url );
+        url = Utils.remove( url );
         url = HttpTools.htmlEncode( url );
         Locale locale = Locale.getDefault();
         String country = locale.getCountry();

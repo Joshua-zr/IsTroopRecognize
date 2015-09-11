@@ -24,23 +24,22 @@
 		android:textColor="@color/black"
 		android:textSize="20sp"/>
 
-	<FrameLayout
-		android:id="@+id/fl_camera_preview"
+	<SurfaceView
+		android:id="@+id/s_preview"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
 		android:layout_marginTop="50dp"
 		android:background="@drawable/reco_kuang">
+	</SurfaceView>
 
-		<ImageView
-			android:id="@+id/reco_line"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:contentDescription="@string/scan_line"
-			android:paddingLeft="10dip"
-			android:paddingRight="10dip"
-			android:src="@drawable/reco_line"/>
-
-	</FrameLayout>
+	<ImageView
+		android:id="@+id/reco_line"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:contentDescription="@string/scan_line"
+		android:paddingLeft="10dip"
+		android:paddingRight="10dip"
+		android:src="@drawable/reco_line"/>
 
 	<Button
 		android:id="@+id/flashBtn"

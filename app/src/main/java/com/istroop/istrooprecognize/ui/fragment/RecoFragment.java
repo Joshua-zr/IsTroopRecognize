@@ -1,42 +1,32 @@
 package com.istroop.istrooprecognize.ui.fragment;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Message;
 import android.os.Vibrator;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.istroop.istrooprecognize.IstroopConstants;
+import com.istroop.istrooprecognize.MainHandler;
 import com.istroop.istrooprecognize.R;
 import com.istroop.istrooprecognize.WMDetectorThread;
-import com.istroop.istrooprecognize.ui.activity.ICardTagPreview;
-import com.istroop.istrooprecognize.ui.activity.RecoDetailEditionActivity;
-import com.istroop.istrooprecognize.ui.activity.RecoDetailMapActivity;
-import com.istroop.istrooprecognize.ui.activity.RecoDetailPicActivity;
-import com.istroop.istrooprecognize.ui.activity.RecoDetailTextActivity;
-import com.istroop.istrooprecognize.ui.activity.RecoDetailWebActivity;
 import com.istroop.istrooprecognize.utils.CameraManager;
-import com.istroop.istrooprecognize.utils.CameraPreview2;
-import com.istroop.istrooprecognize.utils.HisDBHelper;
+import com.istroop.istrooprecognize.utils.CameraPreview;
 import com.istroop.istrooprecognize.utils.HttpTools;
 import com.istroop.istrooprecognize.utils.Utils;
-import com.istroop.openapi.Constant;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -50,7 +40,7 @@ import java.util.regex.Pattern;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class RecoFragment extends BaseFragment implements Camera.PreviewCallback {
+public class RecoFragment extends BaseFragment implements SurfaceHolder.Callback {
 
     private static final String TAG = "RecoFragment";
 
@@ -72,8 +62,8 @@ public class RecoFragment extends BaseFragment implements Camera.PreviewCallback
     TextView    menuIcon;
     @Bind( R.id.reco_line )
     ImageView   recoLine;
-    @Bind( R.id.fl_camera_preview )
-    FrameLayout flCameraPreview;
+    @Bind( R.id.s_preview )
+    SurfaceView sPreview;
     @Bind( R.id.flashBtn )
     Button      flashBtn;
     @Bind( R.id.reco_desText )
@@ -86,10 +76,11 @@ public class RecoFragment extends BaseFragment implements Camera.PreviewCallback
     TextView    recoDetail;
 
     private Camera           mCamera;
-    private CameraPreview2   mPreview;
+    private CameraPreview    mPreview;
     private WMDetectorThread mDetectorThd;
     private boolean          menu_icon_notClickable;    //防止扫描等待的过程中，可以进入相册
     private boolean          flashIsOpen;
+    private boolean          hasFlashLight;
 
     private Integer DB_tag_type;   //标签类型标记
     private String  url;   //web标签链接
@@ -108,18 +99,18 @@ public class RecoFragment extends BaseFragment implements Camera.PreviewCallback
     private int mPreviewWidth;
     private int mPreviewHeight;
 
+    private CameraManager cameraManager;
+    private boolean       hasSurface;
+
     public RecoFragment() {}
 
     @Override
     public void onCreate( Bundle savedInstanceState ) {
         super.onCreate( savedInstanceState );
         Utils.log( TAG, "onCreate", 6 );
-        if ( !Utils.chackCameraHardware( getActivity() ) ) {
-            Toast.makeText( getActivity(), "您的设备没有摄像头！", Toast.LENGTH_LONG ).show();
-        }
         if ( main_handler == null ) {
             main_handler = new MainHandler( this );
-            mDetectorThd = new WMDetectorThread( "wmdetector", main_handler, getActivity() );
+//            mDetectorThd = new WMDetectorThread( "wmdetector", main_handler, this );
             mDetectorThd.start();
         }
     }
@@ -130,23 +121,17 @@ public class RecoFragment extends BaseFragment implements Camera.PreviewCallback
         View view = inflater.inflate( R.layout.fragment_reco, container, false );
         Utils.log( TAG, "onCreateView", 6 );
         ButterKnife.bind( this, view );
-        if ( !safeCameraOpenInView( flCameraPreview ) ) {
-            Utils.log( TAG, "Error, Camera failed to open", 6 );
-            return view;
-        }
         flashBtn.setOnClickListener( v -> {
-            if ( getActivity().getPackageManager().hasSystemFeature( PackageManager.FEATURE_CAMERA_FLASH ) ) {
-                Camera.Parameters params = mCamera.getParameters();
-                if ( Camera.Parameters.FLASH_MODE_OFF.equals( params.getFlashMode() ) ) {
-                    params.setFlashMode( Camera.Parameters.FLASH_MODE_TORCH );
-                    flashBtn.setBackgroundResource( R.drawable.torch_off );
+            if ( hasFlashLight ) {
+                if ( cameraManager.flashModeSwitch() ) {
+                    Utils.log( TAG, "turn_on", 6 );
                     flashIsOpen = true;
-                } else {
-                    params.setFlashMode( Camera.Parameters.FLASH_MODE_OFF );
                     flashBtn.setBackgroundResource( R.drawable.torch_on );
+                } else {
+                    Utils.log( TAG, "turn_off", 6 );
                     flashIsOpen = false;
+                    flashBtn.setBackgroundResource( R.drawable.torch_off );
                 }
-                //IstroopConstants.mCamera.setParameters( params );
             } else {
                 Toast.makeText( getActivity(), "您的设备不支持闪光灯",
                                 Toast.LENGTH_LONG ).show();
@@ -155,18 +140,7 @@ public class RecoFragment extends BaseFragment implements Camera.PreviewCallback
         return view;
     }
 
-    private boolean safeCameraOpenInView( ViewGroup group ) {
-        boolean qOpened;
-        releaseCameraAndPreview();
-        mCamera = CameraManager.getCameraInstance();
-        qOpened = ( mCamera != null );
-        CameraManager.initCamera( mCamera );
-        mPreview = new CameraPreview2( getActivity().getBaseContext(), mCamera );
-        group.addView( mPreview );
-        return qOpened;
-    }
-
-    private void releaseCameraAndPreview() {
+/*    private void releaseCameraAndPreview() {
         if ( mCamera != null ) {
             mCamera.stopPreview();
             mCamera.release();
@@ -175,7 +149,7 @@ public class RecoFragment extends BaseFragment implements Camera.PreviewCallback
         if ( mPreview != null ) {
             mPreview.destroyDrawingCache();
         }
-    }
+    }*/
 
     @Override
     public void onStart() {
@@ -187,12 +161,24 @@ public class RecoFragment extends BaseFragment implements Camera.PreviewCallback
     public void onResume() {
         super.onResume();
         Utils.log( TAG, "onResume", 6 );
+        if ( cameraManager == null ) {
+            cameraManager = new CameraManager( getActivity(), main_handler, mDetectorThd );
+        }
+
+        SurfaceHolder holder = sPreview.getHolder();
+        if ( hasSurface ) {
+            initCamera( holder );
+        } else {
+            holder.addCallback( this );
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
         Utils.log( TAG, "onPause", 6 );
+        cameraManager.stopPreview();
+        cameraManager.closeDriver();
     }
 
     @Override
@@ -211,14 +197,12 @@ public class RecoFragment extends BaseFragment implements Camera.PreviewCallback
     public void onDetach() {
         super.onDetach();
         Utils.log( TAG, "onDetach", 6 );
-        mCamera.setOneShotPreviewCallback( this );
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         Utils.log( TAG, "onDestory", 6 );
-        releaseCameraAndPreview();
     }
 
     @Override
@@ -228,346 +212,39 @@ public class RecoFragment extends BaseFragment implements Camera.PreviewCallback
     }
 
     @Override
-    public void onPreviewFrame( byte[] data, Camera camera ) {
-        Handler handler = mDetectorThd.getHandler();
-        if ( handler != null ) {
-            Message msg = Message.obtain( handler,
-                                          IstroopConstants.IAMessages_MAIN_WM_DETECT_REQ,
-                                          mPreviewWidth, mPreviewHeight, data );
-            handler.sendMessage( msg );
+    public void surfaceCreated( SurfaceHolder holder ) {
+        if ( !hasSurface ) {
+            hasSurface = true;
+            initCamera( holder );
         }
     }
 
-    private void scandata() {
-        new Thread( () -> {
-            String path = Constant.URL_PATH + "stat.gif?plat=android&type=scan&gps=" + Constant.coordinate.latitude + "," + Constant.coordinate.longitude + "&device_id=" + Constant.imei + "&device_type=" + Constant.model + "&appkey=" + Constant.appKey;
-            String result = null;
-            try {
-                result = HttpTools.toString( path );
-            } catch ( IOException e ) {
-                e.printStackTrace();
-            }
-            Utils.log( TAG, result + "`````````````", 6 );
-        } ).start();
+    @Override
+    public void surfaceChanged( SurfaceHolder holder, int format, int width, int height ) {
+
     }
 
-    class MainHandler extends Handler {
+    @Override
+    public void surfaceDestroyed( SurfaceHolder holder ) {
 
-        private RecoFragment mFragment = null;
-        private String hisInfo;
+    }
 
-        public MainHandler( RecoFragment fragment ) {
-            this.mFragment = fragment;
+    private void initCamera( SurfaceHolder surfaceHolder ) {
+        if ( surfaceHolder == null ) {
+            throw new IllegalStateException( "No SurfaceHolder provided" );
         }
+        if ( cameraManager.isOpen() ) {
+            Log.w( TAG, "Camera is already open" );
+            return;
+        }
+        try {
+            cameraManager.openDriver( surfaceHolder );
+            cameraManager.startPreview();
+            cameraManager.requestPreviewFrame();
+        } catch ( RuntimeException ignored ) {
 
-        public void handleMessage( Message msg ) {
-            switch ( msg.what ) {
-                case MESAGE_SCAN_DATA:
-                    scandata();
-                    menu_icon_notClickable = false;
-                    break;
-                case RECO_ALBUM_FAIL:
-                    centerPro.setVisibility( View.INVISIBLE );
-                    menu_icon_notClickable = false;
-                    Toast.makeText( getActivity(),
-                                    getResources().getString( R.string.reco_error ),
-                                    Toast.LENGTH_SHORT ).show();
-                    break;
-                case RECO_ALBUM_SUCCESS:
-                    // centerPro.setVisibility(View.INVISIBLE);
-                    final int wm_id = ( Integer ) msg.obj;
-                    new Thread() {
-                        public void run() {
-                            loadPicInfo( wm_id );
-                        }
-                    }.start();
-                    break;
-                case IAMessages_RESULT_NULL:
-                    // 当url正确 但返回结果为空的时候,重新扫描
-                    mCamera.startPreview();
-                    mCamera.setOneShotPreviewCallback( mFragment );
-                    centerPro.setVisibility( View.INVISIBLE );
-                    break;
-                case IAMessages_UNKNOWN_ERROR:
-                    String str = ( String ) msg.obj;
-                    if ( !TextUtils.isEmpty( str ) ) {
-                        Toast.makeText( getActivity(), str, Toast.LENGTH_LONG ).show();
-                    }
-                    mCamera.startPreview();
-                    mCamera.setOneShotPreviewCallback( mFragment );
-                    centerPro.setVisibility( View.INVISIBLE );
-                    break;
-                case IAMessages_NETSWORK_SLOW:
-                    Toast.makeText( getActivity(), "无网络反应，请检查网络配置", Toast.LENGTH_LONG )
-                            .show();
-                    mCamera.startPreview();
-                    mCamera.setOneShotPreviewCallback( mFragment );
-                    centerPro.setVisibility( View.INVISIBLE );
-                    break;
-                case IAMessages_SERVICE_ERROR:
-
-                    Dialog serviceDialog = new AlertDialog.Builder( getActivity() )
-                            .setTitle( "服务器异常" )
-                            .setMessage( "服务器异常,请联系服务器负责人" )
-                            .setPositiveButton( "确定",
-                                                ( dialog, which ) -> {
-                                                    mCamera.startPreview();
-                                                    mCamera.setOneShotPreviewCallback(
-                                                            mFragment );
-                                                    centerPro.setVisibility( View.INVISIBLE );
-                                                } ).create();
-                    serviceDialog.show();
-                    break;
-                case IAMessages_NETWORK_ERROR:
-                    Dialog networkDialog = new AlertDialog.Builder( getActivity() )
-                            .setTitle( "网络错误" )
-                            .setMessage( "无法连接到网络，请检查网络配置" )
-                            .setPositiveButton( "确定",
-                                                ( dialog, which ) -> {
-                                                    mCamera.startPreview();
-                                                    mCamera
-                                                            .setOneShotPreviewCallback(
-                                                                    mFragment );
-                                                    centerPro.setVisibility( View.INVISIBLE );
-                                                } ).create();
-                    networkDialog.show();
-                    break;
-                case IAMessages_SHOW_PROGRESS:
-                    mCamera.stopPreview();
-                    centerPro.setVisibility( View.VISIBLE );
-                    recoLine.setVisibility( View.INVISIBLE );
-                    break;
-                case IAMessages_SUB_FLAG_NO_WATERMARK:
-                    if ( mCamera != null ) {
-                        mCamera.setOneShotPreviewCallback( mFragment );
-                    }
-                    break;
-                case IAMessages_SUB_WATERMARK_ID:
-                    if ( DB_tag_type == 8 ) {
-                        centerPro.setVisibility( View.INVISIBLE );
-                        Intent webIntent = new Intent( getActivity(), RecoDetailWebActivity.class );
-                        webIntent.putExtra( "picUrl", url );
-                        startActivity( webIntent );
-                        break;
-                    } else if ( DB_tag_type < 0 ) {
-                        Dialog serviceDialog2 = new AlertDialog.Builder( getActivity() )
-                                .setMessage( "这张超级图片里没有更多信息噢~" )
-                                .setPositiveButton( "确定",
-                                                    ( dialog, which ) -> {
-                                                        mCamera.startPreview();
-                                                        mCamera.setOneShotPreviewCallback(
-                                                                mFragment );
-                                                        centerPro.setVisibility( View.INVISIBLE );
-                                                    } ).create();
-                        serviceDialog2.show();
-                        break;
-                    }
-
-                    HisDBHelper dbHelper = new HisDBHelper( getActivity() );
-                    DB_mtime = System.currentTimeMillis();
-
-                    String time = DB_mtime + "";
-                    time = time.substring( 0, 10 );
-                    DB_mtime = Long.parseLong( time );
-
-                    if ( DB_location == null ) {
-                        DB_location = "暂无";
-                    }
-                    if ( IstroopConstants.isLogin ) {
-                        hisInfo = null;
-                        if ( "1".equals( dB_is_history ) ) {
-                            if ( dB_pid != null ) {
-                                new Thread() {
-                                    @Override
-                                    public void run() {
-                                        hisInfo = HttpTools.userInfo(
-                                                IstroopConstants.URL_PATH
-                                                        + "/ICard/setHistory/?pid="
-                                                        + dB_pid + "&params[wmid]="
-                                                        + DB_wm_id
-                                                        + "&params[Type]="
-                                                        + DB_tag_type
-                                                        + "&params[Title]="
-                                                        + DB_tag_title.trim()
-                                                        + "&params[Createtime]="
-                                                        + DB_mtime
-                                                        + "&params[Desc]="
-                                                        + DB_tag_desc
-                                                        + "&params[Link]="
-                                                        + DB_tag_url
-                                                        + "&params[Address]="
-                                                        + DB_location
-                                                        + "&params[PicUrl]="
-                                                        + DB_fileurl,
-                                                IstroopConstants.cookieStore );
-                                        if ( hisInfo != null ) {
-                                            try {
-                                                JSONObject jsonObject = new JSONObject(
-                                                        hisInfo );
-                                                if ( jsonObject
-                                                        .getBoolean( "success" ) ) {
-                                                    Message message = Message
-                                                            .obtain();
-                                                    message.what = HIS_ADD_SUCCESS;
-                                                    main_handler
-                                                            .sendMessage( message );
-                                                } else {
-                                                    Message message = Message
-                                                            .obtain();
-                                                    message.what = HIS_ADD_FAIL;
-                                                    main_handler
-                                                            .sendMessage( message );
-                                                }
-                                            } catch ( JSONException e ) {
-                                                e.printStackTrace();
-                                            }
-                                        }
-                                    }
-                                }.start();
-                            }
-                        } else {
-                            new Thread() {
-                                @Override
-                                public void run() {
-                                    DB_tag_title = replaceBlank( DB_tag_title );
-                                    DB_tag_desc = replaceBlank( DB_tag_desc );
-                                    DB_location = replaceBlank( DB_location );
-                                    hisInfo = HttpTools.userInfo(
-                                            IstroopConstants.URL_PATH
-                                                    + "/ICard/setHistory/?"
-                                                    + "params[wmid]=" + DB_wm_id
-                                                    + "&params[Type]="
-                                                    + DB_tag_type
-                                                    + "&params[Title]="
-                                                    + DB_tag_title.split( " " )[0]
-                                                    + "&params[Createtime]="
-                                                    + DB_mtime + "&params[Desc]="
-                                                    + DB_tag_desc
-                                                    + "&params[Link]=" + DB_tag_url
-                                                    + "&params[Address]="
-                                                    + DB_location
-                                                    + "&params[PicUrl]="
-                                                    + DB_fileurl,
-                                            IstroopConstants.cookieStore );
-                                    if ( hisInfo != null ) {
-                                        try {
-                                            JSONObject jsonObject = new JSONObject(
-                                                    hisInfo );
-                                            if ( jsonObject.getBoolean( "success" ) ) {
-                                                Message message = Message.obtain();
-                                                message.what = HIS_ADD_SUCCESS;
-                                                main_handler.sendMessage( message );
-                                            } else {
-                                                Message message = Message.obtain();
-                                                message.what = HIS_ADD_FAIL;
-                                                main_handler.sendMessage( message );
-                                            }
-                                        } catch ( JSONException e ) {
-                                            e.printStackTrace();
-                                        }
-                                    }
-                                }
-                            }.start();
-                        }
-                    } else {
-                        boolean isIn = dbHelper.isInDB( DB_wm_id );
-                        if ( isIn ) {
-                            dbHelper.updateDB( DB_wm_id, DB_fileurl, DB_tag_type,
-                                               DB_tag_url, DB_tag_title, DB_tag_desc,
-                                               DB_mtime, DB_location );
-                        } else {
-                            dbHelper.insertIntoDB( DB_wm_id, DB_fileurl,
-                                                   DB_tag_type, DB_tag_url, DB_tag_title,
-                                                   DB_tag_desc, DB_mtime, DB_location );
-                        }
-                        Message message = Message.obtain();
-                        message.what = HIS_ADD_SUCCESS;
-                        main_handler.sendMessage( message );
-                    }
-
-                    break;
-                case HIS_ADD_SUCCESS:
-                    centerPro.setVisibility( View.INVISIBLE );
-                    recoLine.setVisibility( View.VISIBLE );
-                    if ( DB_tag_type == 1 || DB_tag_type == 2 || DB_tag_type == 5
-                            || DB_tag_type == 6 ) {
-                        Intent webIntent = new Intent( getActivity(),
-                                                       RecoDetailWebActivity.class );
-                        webIntent.putExtra( "picUrl", DB_tag_url );
-                        startActivity( webIntent );
-                    } else if ( DB_tag_type == 0 ) {
-                        Intent textIntent = new Intent( getActivity(),
-                                                        RecoDetailTextActivity.class );
-                        textIntent.putExtra( "DB_tag_title", DB_tag_title );
-                        textIntent.putExtra( "DB_tag_desc", DB_tag_desc );
-                        startActivity( textIntent );
-
-                    } else if ( DB_tag_type == 4 ) {
-                        Intent piciIntent = new Intent( getActivity(),
-                                                        RecoDetailPicActivity.class );
-                        piciIntent.putExtra( "DB_tag_title", DB_tag_title );
-                        piciIntent.putExtra( "DB_tag_url", DB_tag_url );
-                        startActivity( piciIntent );
-
-                    } else if ( DB_tag_type == 7 ) {
-                        Intent mapIntent = new Intent( getActivity(),
-                                                       RecoDetailMapActivity.class );
-                        mapIntent.putExtra( "DB_tag_url", DB_tag_url );
-                        mapIntent.putExtra( "DB_tag_title", DB_tag_title );
-                        startActivity( mapIntent );
-
-                    } else if ( DB_tag_type == 3 ) {
-                        DB_tag_title = DB_tag_title + "==" + DB_tag_url;
-                        String[] split = DB_tag_title.split( "==" );
-//					LogUtil.i(TAG, "描述信息:" + DB_tag_desc);
-                        if ( !TextUtils.isEmpty( DB_tag_desc ) ) {
-                            if ( "copy".equals( DB_tag_desc ) ) {
-                                Intent editionIntent = new Intent(
-                                        getActivity(),
-                                        RecoDetailEditionActivity.class );
-                                editionIntent.putExtra( "DB_tag_url", DB_tag_url );
-                                editionIntent
-                                        .putExtra( "DB_tag_title", DB_tag_title );
-                                startActivity( editionIntent );
-                            } else {
-                                Intent editionIntent = new Intent(
-                                        getActivity(), ICardTagPreview.class );
-                                Bundle bundle = new Bundle();
-                                bundle.putStringArray( "cardInfos", split );
-                                bundle.putString( "headurl", DB_fileurl );
-                                editionIntent.putExtras( bundle );
-                                startActivity( editionIntent );
-                            }
-                        } else {
-                            Intent editionIntent = new Intent( getActivity(),
-                                                               ICardTagPreview.class );
-                            Bundle bundle = new Bundle();
-                            bundle.putStringArray( "cardInfos", split );
-                            bundle.putString( "card_type", "reco" );
-                            editionIntent.putExtras( bundle );
-                            startActivity( editionIntent );
-                        }
-                        mCamera.startPreview();
-                    }
-                    break;
-                case HIS_ADD_FAIL:
-                    Toast.makeText( getActivity(), "保存失败", Toast.LENGTH_SHORT )
-                            .show();
-                    break;
-                default:
-                    Dialog serviceDialog2 = new AlertDialog.Builder( getActivity() )
-                            .setMessage( "这张超级图片里没有更多信息噢~" )
-                            .setPositiveButton( "确定",
-                                                ( dialog, which ) -> {
-                                                    mCamera.startPreview();
-                                                    mCamera
-                                                            .setOneShotPreviewCallback(
-                                                                    mFragment );
-                                                    centerPro.setVisibility( View.INVISIBLE );
-                                                } ).create();
-                    serviceDialog2.show();
-                    break;
-            }
+        } catch ( IOException e ) {
+            e.printStackTrace();
         }
     }
 
@@ -822,6 +499,18 @@ public class RecoFragment extends BaseFragment implements Camera.PreviewCallback
             default:
                 return -1;
         }
+    }
+
+    public void centerProVisibility( int state ) {
+        centerPro.setVisibility( state );
+    }
+
+    public void recoLineVisibility( int state ) {
+        recoLine.setVisibility( state );
+    }
+
+    public void requestPreviewFrame() {
+        cameraManager.requestPreviewFrame();
     }
 
 }

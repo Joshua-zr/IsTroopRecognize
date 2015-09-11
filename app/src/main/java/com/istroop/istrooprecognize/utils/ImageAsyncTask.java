@@ -145,7 +145,7 @@ public class ImageAsyncTask extends AsyncTask<String, ProgressBar, Bitmap> {
                 Log.i( TAG, "执行路径创建操作" );
             }
             Log.i( TAG, "创建路径成功" );
-            File file = new File( IstroopConstants.PICTURE_PATH, MD5Util.md5( url ) + ".jpg" );
+            File file = new File( IstroopConstants.PICTURE_PATH, Utils.md5( url ) + ".jpg" );
             if ( file.exists() ) {
                 file.delete();
             }
@@ -166,6 +166,6 @@ public class ImageAsyncTask extends AsyncTask<String, ProgressBar, Bitmap> {
     }
 
     public Bitmap getBitmapFileCache( String url ) {
-        return BitmapFactory.decodeFile( IstroopConstants.PICTURE_PATH + "/" + MD5Util.md5( url ) + ".jpg" );
+        return BitmapFactory.decodeFile( IstroopConstants.PICTURE_PATH + "/" + Utils.md5( url ) + ".jpg" );
     }
 }

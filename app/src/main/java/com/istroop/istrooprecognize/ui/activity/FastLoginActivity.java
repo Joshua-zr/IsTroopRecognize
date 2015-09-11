@@ -13,7 +13,8 @@ import com.tencent.mm.sdk.modelmsg.SendAuth;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 
 public class FastLoginActivity extends BaseActivity implements View.OnClickListener {
-    private static final int ICARD_LOGIN_REGISTER_RESULT = 100;
+    private static final int ICARD_REGISTER2_MOBILE = 1;
+    private static final int ICARD_REGISTER2_MAIL = 2;
 
     //微信注册
     private void regToWx() {
@@ -52,8 +53,11 @@ public class FastLoginActivity extends BaseActivity implements View.OnClickListe
 
             case R.id.bt_regist:
                 Intent intent = new Intent( this,
-                                            ICardRegisterActivity.class );
-                startActivityForResult( intent, ICARD_LOGIN_REGISTER_RESULT );
+                                            ICardRegistreMobileActivity.class );
+                Bundle bundle = new Bundle();
+                bundle.putString("mobile_findpwd", "超级图片");
+                intent.putExtras(bundle);
+                startActivityForResult(intent, ICARD_REGISTER2_MOBILE);
                 break;
         }
     }

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Application;
 
 import com.facebook.stetho.Stetho;
+import com.istroop.istrooprecognize.Log.Logger;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -21,6 +22,7 @@ public class MyApplication extends Application {
                         .enableDumpapp( Stetho.defaultDumperPluginsProvider( this ) )
                         .enableWebKitInspector( Stetho.defaultInspectorModulesProvider( this ) )
                         .build() );
+        Logger.init();
     }
 
     // 单例模式中获取唯一的MyApplication实例

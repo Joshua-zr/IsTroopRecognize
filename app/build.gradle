@@ -50,8 +50,8 @@ android {
         applicationId "com.istroop.istrooprecognize"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 11
-        versionName "2.5.1"
+        versionCode 12
+        versionName "2.6"
     }
 
     buildTypes {

@@ -8,9 +8,6 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.FeatureInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.ImageFormat;
-import android.hardware.Camera;
-import android.hardware.Camera.Parameters;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -27,11 +24,9 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -39,13 +34,14 @@ import android.widget.Toast;
 
 import com.istroop.istrooprecognize.BaseActivity;
 import com.istroop.istrooprecognize.IstroopConstants;
+import com.istroop.istrooprecognize.Log.Logger;
 import com.istroop.istrooprecognize.MyApplication;
 import com.istroop.istrooprecognize.R;
 import com.istroop.istrooprecognize.WMDetectorThread;
 import com.istroop.istrooprecognize.utils.CameraManager;
 import com.istroop.istrooprecognize.utils.HisDBHelper;
 import com.istroop.istrooprecognize.utils.HttpTools;
-import com.istroop.istrooprecognize.utils.ViewServer;
+import com.istroop.istrooprecognize.utils.Utils;
 import com.istroop.openapi.Constant;
 import com.istroop.watermark.AndroidWMDetector;
 
@@ -55,27 +51,29 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class RecoActivity extends BaseActivity implements SurfaceHolder.Callback {
 
-    private static final String TAG              = "RECOAcitvity";
-    private static final int    MESAGE_SCAN_DATA = 100;
+    private static final String TAG = "RECOAcitvity";
 
-    private int         mPreviewWidth;
-    private int         mPreviewHeight;
+    private static final   int MESSAGE_RECOACTIVITY_EXIT = 0;
+    protected static final int HIS_ADD_SUCCESS           = 21;
+    protected static final int HIS_ADD_FAIL              = 22;
+    private static final   int PHOTO_REQUEST_GALLERY     = 23;
+    protected static final int RECO_ALBUM_FAIL           = 24;
+    protected static final int RECO_ALBUM_SUCCESS        = 25;
+    private static final   int MESAGE_SCAN_DATA          = 100;
+
     private ProgressBar centerPro;
     private Button      flashBtn;
-    private FrameLayout preview_frame;
 
     private Handler main_handler;
     private WMDetectorThread mDetectorThd = null;
 
-    private boolean flashIsOpen  = false;        //闪光灯是否打开
-    private boolean cameraConfig = false;
-    private boolean isExit       = false;
+    private boolean flashIsOpen = false;        //闪光灯是否打开
+    private boolean isExit      = false;
     private boolean hasSurface;
     private boolean menu_icon_notClickable;
 
@@ -92,39 +90,19 @@ public class RecoActivity extends BaseActivity implements SurfaceHolder.Callback
     public String  DB_location;
     public boolean hasFlashLight;
 
-    protected static final int HIS_ADD_SUCCESS       = 21;
-    protected static final int HIS_ADD_FAIL          = 22;
-    private static final   int PHOTO_REQUEST_GALLERY = 23;
-    protected static final int RECO_ALBUM_FAIL       = 24;
-    protected static final int RECO_ALBUM_SUCCESS    = 25;
 
-    private String             dB_is_history;
-    private String             dB_pid;
+    private String dB_is_history;
+    private String dB_pid;
+
     private TranslateAnimation ta;
-    private OnClickListener    btnListener;
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage( Message msg ) {
-            super.handleMessage( msg );
-            switch ( msg.what ) {
-                case 7:
-                    isExit = false;
-                    break;
-                case MESAGE_SCAN_DATA:
-                    scandata();
-                    menu_icon_notClickable = false;
-                    break;
-                default:
-                    break;
-            }
-        }
-    };
-    private CameraManager cameraManager;
+    private CameraManager      cameraManager;
+
+    public RecoActivity() {}
 
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
         super.onCreate( savedInstanceState );
-        Log.e( TAG, "onCreate" );
+        Logger.e( "onCreate" );
         setContentView( R.layout.reco );
         hasFlashLight = hasFlashLight();
         DisplayMetrics metrics = new DisplayMetrics();
@@ -132,6 +110,8 @@ public class RecoActivity extends BaseActivity implements SurfaceHolder.Callback
         IstroopConstants.density = metrics.density;
         if ( main_handler == null ) {
             main_handler = new MainHandler( this );
+            mDetectorThd = new WMDetectorThread( "wmdetector", main_handler, this );
+            mDetectorThd.start();
         }
 
         if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO ) {
@@ -148,13 +128,14 @@ public class RecoActivity extends BaseActivity implements SurfaceHolder.Callback
         flashBtn.setOnClickListener( v -> {
             if ( hasFlashLight ) {
                 if ( cameraManager.flashModeSwitch() ) {
+                    Utils.log( TAG, "turn_on", 6 );
                     flashIsOpen = true;
                     flashBtn.setBackgroundResource( R.drawable.torch_on );
                 } else {
+                    Utils.log( TAG, "turn_off", 6 );
                     flashIsOpen = false;
                     flashBtn.setBackgroundResource( R.drawable.torch_off );
                 }
-                ViewServer.get( this ).setFocusedWindow( this );
             } else {
                 Toast.makeText( getApplicationContext(), "您的设备不支持闪光灯",
                                 Toast.LENGTH_LONG ).show();
@@ -166,24 +147,12 @@ public class RecoActivity extends BaseActivity implements SurfaceHolder.Callback
         reco_line = ( ImageView ) findViewById( R.id.reco_line );
         reco_line.setVisibility( View.VISIBLE );
         trans();
-
-        ViewServer.get( this ).addWindow( this );
     }
-
-/*    private static Camera getCameraInstance() {
-        Camera c = null;
-        try {
-            c = Camera.open(); // attempt to get a Camera instance
-        } catch ( Exception e ) {
-            // Camera is not available (in use or does not exist)
-        }
-        return c; // returns null if camera is unavailable
-    }*/
 
     @Override
     protected void onStart() {
         super.onStart();
-        Log.e( TAG, "onStart" );
+        Logger.e( "onStart" );
         if ( flashIsOpen ) {
             flashIsOpen = false;
             flashBtn.setBackgroundResource( R.drawable.torch_off );
@@ -253,7 +222,6 @@ public class RecoActivity extends BaseActivity implements SurfaceHolder.Callback
                             getContentResolver(), uri );
                     if ( photo != null ) {
                         int wm_id = AndroidWMDetector.bmpdetect( photo );
-//						LogUtil.i(TAG, "相册的水印号为:" + wm_id);
                         if ( wm_id < 0 ) {
                             Message msg = Message.obtain();
                             msg.what = RECO_ALBUM_FAIL;
@@ -283,20 +251,11 @@ public class RecoActivity extends BaseActivity implements SurfaceHolder.Callback
         reco_line.startAnimation( ta );
     }
 
-/*    @Override
-    protected void onStart() {
-        super.onStart();
-        //如果切换会扫描界面，原本闪光灯开启，开启闪光灯
-        if ( flashIsOpen ) {
-            mParam.setFlashMode( Parameters.FLASH_MODE_TORCH );
-        }
-    }*/
-
     @Override
     protected void onResume() {
         super.onResume();
         if ( cameraManager == null ) {
-            cameraManager = new CameraManager( this, main_handler );
+            cameraManager = new CameraManager( this, main_handler, mDetectorThd );
         }
         SurfaceView surfaceView = ( SurfaceView ) findViewById( R.id.camera_preview );
         SurfaceHolder holder = surfaceView.getHolder();
@@ -313,7 +272,6 @@ public class RecoActivity extends BaseActivity implements SurfaceHolder.Callback
         Log.e( TAG, "onPause" );
         cameraManager.stopPreview();
         cameraManager.closeDriver();
-
     }
 
     @Override
@@ -342,8 +300,6 @@ public class RecoActivity extends BaseActivity implements SurfaceHolder.Callback
         } catch ( InterruptedException e ) {
             e.printStackTrace();
         }
-
-        ViewServer.get( this ).removeWindow( this );
     }
 
     public static boolean isConn( Context context ) {
@@ -373,7 +329,7 @@ public class RecoActivity extends BaseActivity implements SurfaceHolder.Callback
 //				+ IstroopConstants.isVibrator);
         Message msg = new Message();
         msg.what = MESAGE_SCAN_DATA;
-        handler.sendMessage( msg );
+        main_handler.sendMessage( msg );
         if ( IstroopConstants.isSound && IstroopConstants.isVibrator ) {
             setVibrator();
         } else if ( !IstroopConstants.isSound && IstroopConstants.isVibrator ) {
@@ -624,32 +580,6 @@ public class RecoActivity extends BaseActivity implements SurfaceHolder.Callback
         }
     }
 
-    private void selectMaxPreviewSize( Parameters params ) {
-        mPreviewHeight = 0;
-        mPreviewWidth = 0;
-        List<Camera.Size> listSizes = params.getSupportedPreviewSizes();
-        for ( int i = 0; i < listSizes.size(); i++ ) {
-            Camera.Size size = listSizes.get( i );
-
-            if ( mPreviewHeight < size.height ) {
-                mPreviewHeight = size.height;
-                mPreviewWidth = size.width;
-            } else if ( mPreviewHeight == size.height ) {
-                if ( mPreviewWidth < size.width )
-                    mPreviewWidth = size.width;
-            }
-        }
-    }
-
-    private boolean isFocusModeSupported( Parameters params, String focusMode ) {
-        List<String> listModes = params.getSupportedFocusModes();
-        for ( int i = 0; i < listModes.size(); i++ ) {
-            if ( listModes.get( i ).equals( focusMode ) )
-                return true;
-        }
-        return false;
-    }
-
     @Override
     public void surfaceCreated( SurfaceHolder holder ) {
         if ( !hasSurface ) {
@@ -659,33 +589,7 @@ public class RecoActivity extends BaseActivity implements SurfaceHolder.Callback
     }
 
     @Override
-    public void surfaceChanged( SurfaceHolder holder, int format, int width, int height ) {
- /*       Log.i( "surfexp", "surfexp_surfaceChanged" );
-        if ( mHolder.getSurface() == null ) {
-            // preview surface does not exist
-            return;
-        }
-
-        // stop preview before making changes
-        try {
-            mCamera.stopPreview();
-        } catch ( Exception e ) {
-            // ignore: tried to stop a non-existent preview
-        }
-
-        // set preview size and make any resize, rotate or
-        // reformatting changes here
-
-        // start preview with new settings
-        try {
-            mCamera.setPreviewDisplay( mHolder );
-            mCamera.setOneShotPreviewCallback( ( Camera.PreviewCallback ) this.getContext() );
-            mCamera.startPreview();
-
-        } catch ( Exception e ) {
-            Log.d( TAG, "Error starting camera preview: " + e.getMessage() );
-        }*/
-    }
+    public void surfaceChanged( SurfaceHolder holder, int format, int width, int height ) {}
 
     @Override
     public void surfaceDestroyed( SurfaceHolder holder ) {
@@ -702,6 +606,13 @@ public class RecoActivity extends BaseActivity implements SurfaceHolder.Callback
 
         public void handleMessage( Message msg ) {
             switch ( msg.what ) {
+                case MESSAGE_RECOACTIVITY_EXIT:
+                    isExit = false;
+                    break;
+                case MESAGE_SCAN_DATA:
+                    scandata();
+                    menu_icon_notClickable = false;
+                    break;
                 case RECO_ALBUM_FAIL:
                     centerPro.setVisibility( View.INVISIBLE );
                     menu_icon_notClickable = false;
@@ -714,7 +625,7 @@ public class RecoActivity extends BaseActivity implements SurfaceHolder.Callback
                     final int wm_id = ( Integer ) msg.obj;
                     new Thread() {
                         public void run() {
-                            loadPicInfo( wm_id );
+//                            loadPicInfo( wm_id );
                         }
                     }.start();
                     break;
@@ -759,11 +670,7 @@ public class RecoActivity extends BaseActivity implements SurfaceHolder.Callback
                     reco_line.setVisibility( View.INVISIBLE );
                     break;
                 case IstroopConstants.IAMessages_SUB_FLAG_NO_WATERMARK:
-//                    if ( IstroopConstants.mCamera != null ) {
-/*                        IstroopConstants.mCamera
-                                .setOneShotPreviewCallback( mActivity );*/
                     cameraManager.requestPreviewFrame();
-//                    }
                     break;
 
                 case IstroopConstants.IAMessages_SUB_WATERMARK_ID:
@@ -1025,7 +932,7 @@ public class RecoActivity extends BaseActivity implements SurfaceHolder.Callback
             isExit = true;
             Toast.makeText( this, "再按一次退出程序", Toast.LENGTH_SHORT ).show();
             // 利用handler延迟发送更改状态信息
-            handler.sendEmptyMessageDelayed( 7, 2000 );
+            main_handler.sendEmptyMessageDelayed( 7, 2000 );
         } else {
             MyApplication.getInstance().exit();
         }

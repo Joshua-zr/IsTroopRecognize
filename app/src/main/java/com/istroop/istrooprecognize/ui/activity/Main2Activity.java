@@ -34,6 +34,8 @@ public class Main2Activity extends Activity {
     private HisFragment  hisFragment;
     private Handler      mHandler;
 
+    private static boolean isExit;
+
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
         super.onCreate( savedInstanceState );
@@ -88,27 +90,24 @@ public class Main2Activity extends Activity {
         exit();
     }
 
+
     static class MainHandler extends Handler {
+
         @Override
         public void handleMessage( Message msg ) {
             super.handleMessage( msg );
             if ( msg.what == MSG_MAIN_DELAY )
-                IstroopConstants.isExit = false;
+                isExit = false;
         }
     }
 
     private void exit() {
-        if ( !IstroopConstants.isExit ) {
-            IstroopConstants.isExit = true;
+        if ( !isExit ) {
+            isExit = true;
             Toast.makeText( this, "再按一次退出程序", Toast.LENGTH_SHORT ).show();
             // 利用handler延迟发送更改状态信息
             mHandler.sendEmptyMessageDelayed( MSG_MAIN_DELAY, 2000 );
         } else {
-//            if ( IstroopConstants.mCamera != null ) {
-//                IstroopConstants.mCamera.stopPreview();
-//                IstroopConstants.mCamera.release();
-//                IstroopConstants.mCamera = null;
-//            }
             MyApplication.getInstance().exit();
         }
     }

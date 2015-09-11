@@ -1,20 +1,15 @@
 package com.istroop.istrooprecognize;
 
-import org.apache.http.client.CookieStore;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.hardware.Camera;
 import android.support.v4.util.LruCache;
 import android.widget.Checkable;
 
 import com.istroop.istrooprecognize.bean.User;
-import com.istroop.openapi.Coordinate;
-import com.tencent.mm.sdk.modelmsg.SendAuth;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 
-import javax.sql.RowSet;
+import org.apache.http.client.CookieStore;
 
 
 @SuppressLint( "SdCardPath" )
@@ -29,7 +24,7 @@ public class IstroopConstants {
     public final static int IAMessages_NETSWORK_SLOW      = 7;// NETSWORK_SLOW
     public final static int IAMessages_RESULT_NULL        = 8;// result null
 
-    public final static int    IAMessages_SUB_FLAG_NO_WATERMARK = 1;
+    public final static int    IAMessages_SUB_FLAG_NO_WATERMARK = 101;
     public final static int    IAMessages_SUB_WATERMARK_ID      = 2;
     public static final int    WINDOW_WIDTH                     = 0;
     public static final String ICHAOTU_URL                      = "http://api.ichaotu.com";
@@ -40,10 +35,6 @@ public class IstroopConstants {
     public static boolean     isVibrator;
     public static boolean     isLogin;
     public static CookieStore cookieStore;
-    public static Coordinate  coordinate;
-    public static String      imei;
-    public static String      model;
-    public static String      appKey;
     private final static int      maxMemory = ( int ) Runtime.getRuntime().maxMemory();
     private final static int      cacheSize = maxMemory / 5;//只分5分之一用来做图片缓存
     public static        LruCache mLruCache = new LruCache<String, Bitmap>(
@@ -79,14 +70,11 @@ public class IstroopConstants {
     public static String       cookie;
     public static CharSequence card_temp;
 
-    public final static int ICARD_DESIGN_TAG_TYPE      = 13;
-    public final static int ICARD_DESIGN_TAG_NAME      = 14;
     public final static int ICARD_DESIGN_TAG_DESC      = 15;
     public final static int ICARD_DESIGN_TAG_LINK      = 16;
     public final static int ICARD_DESIGN_TAG_TITLE     = 17;
     public final static int ICARD_DESIGN_TAG_VIDEO_MAP = 18;
     public static Checkable sm;
-    public static String    downUrl;
 
     public static String access_token;
     public static String openid;

@@ -11,17 +11,6 @@ import android.graphics.Rect;
 
 public class BitmapUtil {
 
-    public static Bitmap getPicFromBytes( byte[] bytes,
-                                          BitmapFactory.Options opts ) {
-        if ( bytes != null )
-            if ( opts != null )
-                return BitmapFactory.decodeByteArray( bytes, 0, bytes.length,
-                                                      opts );
-            else
-                return BitmapFactory.decodeByteArray( bytes, 0, bytes.length );
-        return null;
-    }
-
     public static Bitmap getCircleBitmap( Bitmap bitmap ) {
         int x = bitmap.getWidth();
         int y = bitmap.getHeight();

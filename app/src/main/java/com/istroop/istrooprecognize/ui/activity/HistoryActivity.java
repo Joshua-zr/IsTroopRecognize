@@ -1,6 +1,5 @@
 package com.istroop.istrooprecognize.ui.activity;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -41,6 +40,7 @@ import com.istroop.istrooprecognize.utils.Okhttps;
 import com.istroop.istrooprecognize.utils.OnTabActivityResultListener;
 import com.istroop.istrooprecognize.utils.UploadClient;
 import com.istroop.istrooprecognize.utils.UploadClientPic;
+import com.istroop.istrooprecognize.utils.Utils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -585,7 +585,6 @@ public class HistoryActivity extends BaseActivity implements OnClickListener,
             return index;
         }
 
-        @SuppressLint( "SimpleDateFormat" )
         @Override
         public View getView( final int index, View convertView, ViewGroup parent ) {
 
@@ -674,13 +673,14 @@ public class HistoryActivity extends BaseActivity implements OnClickListener,
                 holder.address.setText( location[0] );
             }
 
-            final String picUri = ( String ) picMap.get( "his_fileurl" );
-            final String picUrl = "http://tstatics.tujoin.com/print.php?w=140&h=140&t=c&url="
+            String picUri = ( String ) picMap.get( "his_fileurl" );
+            String picUrl = "http://tstatics.tujoin.com/print.php?w=140&h=140&t=c&url="
                     + picUri;
             loadImage( holder, picUrl );
             holder.picImage.setOnClickListener( arg0 -> {
                 Intent intent = new Intent( HistoryActivity.this,
                                             ImagePagerActivity.class );
+                Utils.log( TAG, "picUrl:" + picUrl + "   number:" + arrayList.size(), 5 );
                 intent.putExtra( "picUrl", picUri );
                 intent.putExtra( "number", arrayList.size() + "" );
                 startActivity( intent );
