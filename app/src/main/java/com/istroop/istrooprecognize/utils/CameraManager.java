@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 
 import com.istroop.istrooprecognize.WMDetectorThread;
+import com.istroop.istrooprecognize.ui.activity.RecoActivity;
 
 import java.io.IOException;
 import java.util.List;
@@ -84,7 +85,6 @@ public class CameraManager {
     public synchronized void openDriver( SurfaceHolder holder ) throws IOException {
         Camera theCamera = camera;
         if ( theCamera == null ) {
-
             theCamera = OpenCameraInterface.open( requestedCameraId );
             if ( theCamera == null ) {
                 throw new IOException();
@@ -127,7 +127,7 @@ public class CameraManager {
             }
         }
         previewCallback = new CameraPreview(
-                mPreviewWidth, mPreviewHeight, wmDetectorThread );
+                mPreviewWidth, mPreviewHeight, wmDetectorThread, context );
     }
 
     public synchronized boolean isOpen() {
@@ -172,7 +172,6 @@ public class CameraManager {
         }
         if ( camera != null && previewing ) {
             camera.stopPreview();
-            previewCallback.setHandler( null, 0 );
             previewing = false;
         }
     }

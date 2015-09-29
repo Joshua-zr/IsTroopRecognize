@@ -40,15 +40,6 @@ public class ColorBarView extends View {
         super( context, attrs, defStyleAttr );
     }
 
-    public ColorBarView( Context context, AttributeSet attrs, OnBarStateChangeListener barStateChangeListener ) {
-        super( context, attrs );
-        this.barStateChangeListener = barStateChangeListener;
-        window_width = IstroopConstants.WINDOW_WIDTH;
-        matrix = new Matrix();
-        paint = new Paint();
-        setImageResID();
-    }
-
     public void setImageResID() {
         backgroundBitmap = BitmapFactory.decodeResource( getResources(),
                                                          R.drawable.icard_color_bar );

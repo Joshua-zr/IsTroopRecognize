@@ -50,8 +50,9 @@ android {
         applicationId "com.istroop.istrooprecognize"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 12
-        versionName "2.6"
+        versionCode 13
+        versionName "2.6.1"
+        manifestPlaceholders = [UMENG_CHANNEL_VALUE: "umeng"]
     }
 
     buildTypes {
@@ -62,12 +63,30 @@ android {
             signingConfig signingConfigs.config
         }
     }
+
     packagingOptions {
         exclude 'META-INF/LICENSE'
         exclude 'META-INF/DEPENDENCIES'
         exclude 'META-INF/NOTICE'
     }
 
+    productFlavors {
+        xiaomi {
+            manifestPlaceholders = [UMENG_CHANNEL_ID: "xiaomi"]
+        }
+        qihoo {
+            manifestPlaceholders = [UMENG_CHANNEL_ID: "qihoo"]
+        }
+        baidu {
+            manifestPlaceholders = [UMENG_CHANNEL_ID: "baidu"]
+        }
+        wandoujia {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "wandoujia"]
+        }
+        qq {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "qq"]
+        }
+    }
 }
 
 dependencies {
@@ -82,4 +101,5 @@ dependencies {
     compile files('libs/httpmime-4.0.jar')
     compile files('libs/stetho-1.1.1-fatjar.jar')
     compile project(':superImageSDK')
+    compile 'com.umeng.analytics:analytics:latest.integration'
 }

@@ -3,7 +3,7 @@
 	package="com.istroop.istrooprecognize"
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:versionCode="11"
-	android:versionName="2.5.1">
+	android:versionName="2.6.1">
 
 	<uses-sdk
 		android:maxSdkVersion="18"
@@ -23,18 +23,21 @@
 	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
 	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 	<uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
+	<uses-permission android:name="ANDROID.PERMISSION.READ_PHONE_STATE"/>
 
 	<application
 		android:allowBackup="true"
+		android:hardwareAccelerated="true"
 		android:icon="@drawable/newicon"
 		android:label="@string/app_name">
+		<meta-data android:name="UMENG_APPKEY" android:value="5603b0a0e0f55a7584003083"/>
+		<meta-data android:name="UMENG_CHANNEL" android:value="${UMENG_CHANNEL_ID}"/>
 		<activity
 			android:name=".ui.activity.MainActivity"
 			android:label="@string/app_name"
 			android:theme="@android:style/Theme.NoTitleBar">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN"/>
-
 				<category android:name="android.intent.category.LAUNCHER"/>
 			</intent-filter>
 		</activity>

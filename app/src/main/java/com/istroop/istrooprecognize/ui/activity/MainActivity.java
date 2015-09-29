@@ -10,6 +10,7 @@ import android.widget.TabHost;
 import com.istroop.istrooprecognize.IstroopConstants;
 import com.istroop.istrooprecognize.R;
 import com.istroop.istrooprecognize.utils.Utils;
+import com.umeng.analytics.MobclickAgent;
 
 @SuppressWarnings( "deprecation" )
 public class MainActivity extends TabActivity {
@@ -53,6 +54,18 @@ public class MainActivity extends TabActivity {
                 startActivity( intent );
             }
         } );
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume( this );
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onResume( this );
     }
 
 }

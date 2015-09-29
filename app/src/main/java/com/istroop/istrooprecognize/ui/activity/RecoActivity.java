@@ -8,6 +8,7 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.FeatureInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.media.Image;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -126,26 +127,28 @@ public class RecoActivity extends BaseActivity implements SurfaceHolder.Callback
             }
         } );
         flashBtn.setOnClickListener( v -> {
-            if ( hasFlashLight ) {
-                if ( cameraManager.flashModeSwitch() ) {
-                    Utils.log( TAG, "turn_on", 6 );
-                    flashIsOpen = true;
-                    flashBtn.setBackgroundResource( R.drawable.torch_on );
-                } else {
-                    Utils.log( TAG, "turn_off", 6 );
-                    flashIsOpen = false;
-                    flashBtn.setBackgroundResource( R.drawable.torch_off );
-                }
-            } else {
-                Toast.makeText( getApplicationContext(), "您的设备不支持闪光灯",
-                                Toast.LENGTH_LONG ).show();
-            }
-        } );
+                                         if ( hasFlashLight ) {
+                                             if ( cameraManager.flashModeSwitch() ) {
+                                                 Utils.log( TAG, "turn_on", 6 );
+                                                 flashIsOpen = true;
+                                                 flashBtn.setBackgroundResource( R.drawable.torch_on );
+                                             } else {
+                                                 Utils.log( TAG, "turn_off", 6 );
+                                                 flashIsOpen = false;
+                                                 flashBtn.setBackgroundResource( R.drawable.torch_off );
+                                             }
+                                         } else {
+                                             Toast.makeText( getApplicationContext(), "您的设备不支持闪光灯",
+                                                             Toast.LENGTH_LONG ).show();
+                                         }
+                                     }
+        );
         centerPro = ( ProgressBar ) findViewById( R.id.centerPro );
         centerPro.setVisibility( View.INVISIBLE );
 
         reco_line = ( ImageView ) findViewById( R.id.reco_line );
         reco_line.setVisibility( View.VISIBLE );
+
         trans();
     }
 
@@ -221,17 +224,7 @@ public class RecoActivity extends BaseActivity implements SurfaceHolder.Callback
                     Bitmap photo = MediaStore.Images.Media.getBitmap(
                             getContentResolver(), uri );
                     if ( photo != null ) {
-                        int wm_id = AndroidWMDetector.bmpdetect( photo );
-                        if ( wm_id < 0 ) {
-                            Message msg = Message.obtain();
-                            msg.what = RECO_ALBUM_FAIL;
-                            main_handler.sendMessage( msg );
-                        } else {
-                            Message msg = Message.obtain();
-                            msg.what = RECO_ALBUM_SUCCESS;
-                            msg.obj = wm_id;
-                            main_handler.sendMessage( msg );
-                        }
+                        recognize( photo );
                     }
                 } catch ( IOException e ) {
                     e.printStackTrace();
@@ -239,6 +232,22 @@ public class RecoActivity extends BaseActivity implements SurfaceHolder.Callback
             }
         }.start();
     }
+
+    public void recognize( Bitmap photo ) {
+        int wm_id = AndroidWMDetector.bmpdetect( photo );
+        Utils.log( TAG, "wm_id : " + wm_id, 5 );
+        if ( wm_id < 0 ) {
+            Message msg = Message.obtain();
+            msg.what = RECO_ALBUM_FAIL;
+            main_handler.sendMessage( msg );
+        } else {
+            Message msg = Message.obtain();
+            msg.what = RECO_ALBUM_SUCCESS;
+            msg.obj = wm_id;
+            main_handler.sendMessage( msg );
+        }
+    }
+
 
     public void trans() {
         ta = new TranslateAnimation( Animation.RELATIVE_TO_PARENT, 0,
@@ -348,8 +357,11 @@ public class RecoActivity extends BaseActivity implements SurfaceHolder.Callback
 
         // http://tapi.tujoin.com/ICard/getInfo/?wmid=2232
         // String picurlStr="http://print.ichaotu.com/api/info/?wmid="+DB_wm_id;
+
         String picurlStr = IstroopConstants.URL_PATH + "/ICard/getInfo/?wmid="
-                + DB_wm_id;
+                + DB_wm_id + "&appkey=" + Constant.appKey + "&device_id=" +
+                Constant.imei + "&device_type=" + Constant.model + "&plat=android&time_created=" +
+                Utils.currentTime() + "&gps=" + Constant.coordinate.latitude + "," + Constant.coordinate.longitude;
 //		LogUtil.i(TAG, "picurlStr:" + picurlStr);
         String picResult;
 
@@ -360,7 +372,7 @@ public class RecoActivity extends BaseActivity implements SurfaceHolder.Callback
             } else {
                 picResult = HttpTools.toString( picurlStr );
             }
-//			LogUtil.i(TAG, "picResult:" + picResult);
+            Utils.log( TAG, "图片扫描结果" + picResult, 5 );
             try {
                 if ( picResult == null ) {
                     // 重新扫描数据
@@ -390,8 +402,7 @@ public class RecoActivity extends BaseActivity implements SurfaceHolder.Callback
                         main_handler.sendMessage( message );
                         return;
                     }
-                    JSONObject dataObject = temObject.getJSONObject( DB_wm_id
-                                                                             + "" );
+                    JSONObject dataObject = temObject.getJSONObject( DB_wm_id + "" );
                     DB_fileurl = dataObject.getString( "fileid" );
                     if ( TextUtils.isEmpty( DB_fileurl )
                             || "null".equals( DB_fileurl ) ) {
@@ -428,90 +439,105 @@ public class RecoActivity extends BaseActivity implements SurfaceHolder.Callback
                         arr.add( key );
                     }
 //					LogUtil.i(TAG, "标记号码:" + arr.get(arr.size() - 1));
-                    JSONObject jsonObject = tagObject.getJSONObject( arr.get( arr
-                                                                                      .size() - 1 ) );
-                    String typeString = jsonObject.getString( "type" );
-                    contentObject = jsonObject.getJSONObject( "content" );
-                    DB_tag_type = tagTypewithString( typeString );
-                    if ( DB_tag_type == 3 ) {// copyright
+                    JSONObject jsonObject;
+                    JSONObject temp_json = null;
+                    int temp_type;
+                    // 通过循环比较，筛选出优先级最高的标签
+                    for ( int i = 0; i < arr.size(); i++ ) {
+                        jsonObject = tagObject.getJSONObject( arr.get( i ) );
+                        String typeString = jsonObject.getString( "type" );
+                        temp_type = tagTypewithString( typeString );
+                        if ( temp_type >= DB_tag_type ) {
+                            DB_tag_type = temp_type;    //保存优先级最高的类型
+                            temp_json = jsonObject;     //保存优先级最高的类型的json数据
+                        }
+                    }
+                    jsonObject = temp_json;
+                    if ( jsonObject != null ) {
+                        contentObject = jsonObject.getJSONObject( "content" );
+
+                        if ( DB_tag_type == 3 ) {// copyright
 //						LogUtil.i(TAG, "内容的数量:" + contentObject.length());
-                        if ( contentObject.length() == 4 ) {
-                            DB_tag_title = "copy";
-                            DB_tag_url = "copy";
-                            DB_tag_desc = "copy";
-                        } else if ( contentObject.length() != 10
-                                && contentObject.length() != 9 ) {
-                            String realname = contentObject
-                                    .getString( "realname" );
-                            String company = contentObject.getString( "company" );
-                            String job = contentObject.getString( "job" );
-                            String companyUrl = contentObject
-                                    .getString( "companyUrl" );
-                            String email = contentObject.getString( "email" );
-                            String phone = contentObject.getString( "phone" );
-                            String weixin = contentObject.getString( "weixin" );
-                            String introduce = contentObject
-                                    .getString( "introduce" );
-                            DB_tag_title = realname;
-                            DB_tag_url = company + "==" + job + "=="
-                                    + companyUrl + "==" + email + "==" + phone
-                                    + "==" + weixin + "==" + introduce;
-                            DB_tag_desc = "copyright";
-                        } else {
-                            String name = contentObject.getString( "name" );
-                            String phone = contentObject.getString( "phone" );
-                            String mail = contentObject.getString( "mail" );
-                            String company = contentObject.getString( "company" );
-                            String department = contentObject
-                                    .getString( "department" );
-                            String position = contentObject
-                                    .getString( "position" );
-                            String companyweb = contentObject
-                                    .getString( "companyweb" );
-                            String address = contentObject.getString( "address" );
-                            String sign = contentObject.getString( "sign" );
-                            String weixin = contentObject.getString( "weixin" );
-                            DB_tag_title = name;
-                            DB_tag_url = phone + "==" + mail + "==" + company
-                                    + "==" + department + "==" + position
-                                    + "==" + companyweb + "==" + address + "=="
-                                    + sign + "==" + weixin;
-                            DB_tag_desc = "";
+                            if ( contentObject.length() == 4 ) {
+                                DB_tag_title = "copy";
+                                DB_tag_url = "copy";
+                                DB_tag_desc = "copy";
+                            } else if ( contentObject.length() != 10
+                                    && contentObject.length() != 9 ) {
+                                String realname = contentObject
+                                        .getString( "realname" );
+                                String company = contentObject.getString( "company" );
+                                String job = contentObject.getString( "job" );
+                                String companyUrl = contentObject
+                                        .getString( "companyUrl" );
+                                String email = contentObject.getString( "email" );
+                                String phone = contentObject.getString( "phone" );
+                                String weixin = contentObject.getString( "weixin" );
+                                String introduce = contentObject
+                                        .getString( "introduce" );
+                                DB_tag_title = realname;
+                                DB_tag_url = company + "==" + job + "=="
+                                        + companyUrl + "==" + email + "==" + phone
+                                        + "==" + weixin + "==" + introduce;
+                                DB_tag_desc = "copyright";
+                            } else {
+                                String name = contentObject.getString( "name" );
+                                String phone = contentObject.getString( "phone" );
+                                String mail = contentObject.getString( "mail" );
+                                String company = contentObject.getString( "company" );
+                                String department = contentObject
+                                        .getString( "department" );
+                                String position = contentObject
+                                        .getString( "position" );
+                                String companyweb = contentObject
+                                        .getString( "companyweb" );
+                                String address = contentObject.getString( "address" );
+                                String sign = contentObject.getString( "sign" );
+                                String weixin = contentObject.getString( "weixin" );
+                                DB_tag_title = name;
+                                DB_tag_url = phone + "==" + mail + "==" + company
+                                        + "==" + department + "==" + position
+                                        + "==" + companyweb + "==" + address + "=="
+                                        + sign + "==" + weixin;
+                                DB_tag_desc = "";
 //							LogUtil.i(TAG, "标题:" + DB_tag_title);
 //							LogUtil.i(TAG, "描述:" + DB_tag_url);
-                        }
-                    } else if ( DB_tag_type == 4 || DB_tag_type == 5 ) {// pic
-                        // personage
-                        DB_tag_url = contentObject.getString( "url" );
-                        DB_tag_title = contentObject.getString( "desc" );
-                        DB_tag_desc = contentObject.getString( "desc" );
-                    } else if ( DB_tag_type == 8 ) {// shopping
-                        shopping_url = contentObject.getString( "url" );
-//						LogUtil.i(TAG, "购物车:" + shopping_url);
-                    } else if ( DB_tag_type == 0 ) {// text
-                        DB_tag_title = contentObject.getString( "title" );
-//						LogUtil.i(TAG, "标题" + DB_tag_title);
-                        DB_tag_desc = contentObject.getString( "desc" );
-//						LogUtil.i(TAG, "描述" + DB_tag_desc);
-                    } else {// link
-                        DB_tag_url = contentObject.getString( "url" );
-//						LogUtil.i(TAG, "地址url:" + DB_tag_url);
-                        DB_tag_title = contentObject.getString( "title" );
-//						LogUtil.i(TAG, "标题" + DB_tag_title);
-                        if ( !contentObject.isNull( "desc" ) ) {
+                            }
+                        } else if ( DB_tag_type == 4 || DB_tag_type == 5 ) {// pic
+                            // personage
+                            DB_tag_url = contentObject.getString( "url" );
+                            DB_tag_title = contentObject.getString( "desc" );
                             DB_tag_desc = contentObject.getString( "desc" );
-                        } else {
-                            DB_tag_desc = "";
-                        }
+                        } else if ( DB_tag_type == 8 ) {// shopping
+                            shopping_url = contentObject.getString( "url" );
+//						LogUtil.i(TAG, "购物车:" + shopping_url);
+                        } else if ( DB_tag_type == 0 ) {// text
+                            DB_tag_title = contentObject.getString( "title" );
+//						LogUtil.i(TAG, "标题" + DB_tag_title);
+                            DB_tag_desc = contentObject.getString( "desc" );
 //						LogUtil.i(TAG, "描述" + DB_tag_desc);
+                        } else {// link
+                            DB_tag_url = contentObject.getString( "url" );
+//						LogUtil.i(TAG, "地址url:" + DB_tag_url);
+                            DB_tag_title = contentObject.getString( "title" );
+//						LogUtil.i(TAG, "标题" + DB_tag_title);
+                            if ( !contentObject.isNull( "desc" ) ) {
+                                DB_tag_desc = contentObject.getString( "desc" );
+                            } else {
+                                DB_tag_desc = "";
+                            }
+//						LogUtil.i(TAG, "描述" + DB_tag_desc);
+                        }
+                        // if(DB_tag_type==0||DB_tag_type==1||DB_tag_type==2||DB_tag_type==6||DB_tag_type==7||DB_tag_type==-1)
+                        // shopping_url = shopping_url.trim();
+                        // DB_tag_url = DB_tag_url.trim();
+                        Message message = main_handler.obtainMessage();
+                        message.arg1 = 1;
+                        message.what = IstroopConstants.IAMessages_SUB_WATERMARK_ID;
+                        main_handler.sendMessage( message );
+                    } else {
+                        Toast.makeText( this, "服务器数据错误", Toast.LENGTH_LONG ).show();
                     }
-                    // if(DB_tag_type==0||DB_tag_type==1||DB_tag_type==2||DB_tag_type==6||DB_tag_type==7||DB_tag_type==-1)
-                    // shopping_url = shopping_url.trim();
-                    // DB_tag_url = DB_tag_url.trim();
-                    Message message = main_handler.obtainMessage();
-                    message.arg1 = 1;
-                    message.what = IstroopConstants.IAMessages_SUB_WATERMARK_ID;
-                    main_handler.sendMessage( message );
                 } else {
                     Message message = main_handler.obtainMessage();
                     message.what = IstroopConstants.IAMessages_SERVICE_ERROR;
@@ -537,16 +563,20 @@ public class RecoActivity extends BaseActivity implements SurfaceHolder.Callback
     }
 
     private void scandata() {
-        new Thread( () -> {
-            String path = Constant.URL_PATH + "stat.gif?plat=android&type=scan&gps=" + Constant.coordinate.latitude + "," + Constant.coordinate.longitude + "&device_id=" + Constant.imei + "&device_type=" + Constant.model + "&appkey=" + Constant.appKey;
-            String result = null;
-            try {
-                result = HttpTools.toString( path );
-            } catch ( IOException e ) {
-                e.printStackTrace();
+        new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                String path = Constant.URL_PATH + "stat.gif?plat=android&type=scan&gps=" + Constant.coordinate.latitude + "," + Constant.coordinate.longitude + "&device_id=" + Constant.imei + "&device_type=" + Constant.model + "&appkey=" + Constant.appKey;
+                String result = null;
+                try {
+                    result = HttpTools.toString( path );
+                } catch ( IOException e ) {
+                    e.printStackTrace();
+                }
+                Utils.log( TAG, result, 5 );
             }
-            Log.e( TAG, result + "`````````````" );
-        } ).start();
+        };
     }
 
     private void setVibrator() {
@@ -616,16 +646,17 @@ public class RecoActivity extends BaseActivity implements SurfaceHolder.Callback
                 case RECO_ALBUM_FAIL:
                     centerPro.setVisibility( View.INVISIBLE );
                     menu_icon_notClickable = false;
-                    Toast.makeText( RecoActivity.this,
-                                    getResources().getString( R.string.reco_error ),
-                                    Toast.LENGTH_SHORT ).show();
+//                    Toast.makeText( RecoActivity.this,
+//                                    getResources().getString( R.string.reco_error ),
+//                                    Toast.LENGTH_SHORT ).show();
+                    cameraManager.requestPreviewFrame();
                     break;
                 case RECO_ALBUM_SUCCESS:
-                    // centerPro.setVisibility(View.INVISIBLE);
+                    centerPro.setVisibility( View.INVISIBLE );
                     final int wm_id = ( Integer ) msg.obj;
                     new Thread() {
                         public void run() {
-//                            loadPicInfo( wm_id );
+                            loadPicInfo( wm_id );
                         }
                     }.start();
                     break;
@@ -638,11 +669,13 @@ public class RecoActivity extends BaseActivity implements SurfaceHolder.Callback
                         Toast.makeText( mActivity, str, Toast.LENGTH_LONG ).show();
                     }
                     centerPro.setVisibility( View.INVISIBLE );
+                    cameraManager.requestPreviewFrame();
                     break;
                 case IstroopConstants.IAMessages_NETSWORK_SLOW:
                     Toast.makeText( mActivity, "无网络反应，请检查网络配置", Toast.LENGTH_LONG )
                             .show();
                     centerPro.setVisibility( View.INVISIBLE );
+                    cameraManager.requestPreviewFrame();
                     break;
                 case IstroopConstants.IAMessages_SERVICE_ERROR:
 

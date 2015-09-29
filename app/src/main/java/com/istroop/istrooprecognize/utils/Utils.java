@@ -15,6 +15,10 @@ import com.istroop.istrooprecognize.BuildConfig;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -23,6 +27,8 @@ import java.util.regex.Pattern;
  * 常用工具类，静态变量，全局变量
  */
 public class Utils {
+
+    public static String TAG = Utils.class.getSimpleName();
 
     /**
      * 验证邮件
@@ -68,7 +74,6 @@ public class Utils {
         // “123a”.matches("[0-9]*") 返回值：false
 
         return num == null || !num.matches( "^(13[0-9]|15[0-9]|18[0-9])[0-9]{8}$" );
-
     }
 
 
@@ -77,6 +82,7 @@ public class Utils {
      */
     public static int dip2px( Context context, float dpValue ) {
         final float scale = context.getResources().getDisplayMetrics().density;
+        Utils.log( TAG, "scale for this phone : " + scale, 5 );
         return ( int ) ( dpValue * scale + 0.5f );
     }
 
@@ -157,24 +163,24 @@ public class Utils {
         return bisConnFlag;
     }
 
-    public static boolean isPassword(String password) {
+    public static boolean isPassword( String password ) {
         //[0-9a-zA-Z!@#$%^&*()_+]{6,16}
         //(?=^.{6,48}$)(?=.*\\d)(?=.*\\W+)(?=.*[A-Z])(?=.*[a-z])(?!.*\\n).*$
         String str = "[0-9a-zA-Z!@#$%^&*()_+]{6,48}";
-        Pattern p = Pattern.compile(str);
+        Pattern p = Pattern.compile( str );
         Matcher m = p.matcher( password );
         return m.matches();
     }
 
     @TargetApi( Build.VERSION_CODES.KITKAT )
-    public static String remove(String str) {
-        if ( TextUtils.isEmpty( str )) {
+    public static String remove( String str ) {
+        if ( TextUtils.isEmpty( str ) ) {
             return str;
         }
         String str2 = ""; //去空格后的字符串
         String[] str1 = str.split( " " ); //把原字符串按空格分割
-        for (int i = 0; i < str1.length; i++) {
-            Log.i("空格", i + ":" + str1[i]);
+        for ( int i = 0; i < str1.length; i++ ) {
+            Log.i( "空格", i + ":" + str1[i] );
             if ( !Objects.equals( str1[i], "" ) ) {
                 str2 += str1[i]; //
             }
@@ -183,26 +189,32 @@ public class Utils {
     }
 
     @TargetApi( Build.VERSION_CODES.JELLY_BEAN )
-    public static void postOnAnimation(View view, Runnable r) {
-        view.postOnAnimation(r);
+    public static void postOnAnimation( View view, Runnable r ) {
+        view.postOnAnimation( r );
     }
 
-    public static String md5(String string) {
+    public static String md5( String string ) {
         byte[] hash;
         try {
-            hash = MessageDigest.getInstance( "MD5" ).digest(string.getBytes("UTF-8"));
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("Huh, MD5 should be supported?", e);
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException("Huh, UTF-8 should be supported?", e);
+            hash = MessageDigest.getInstance( "MD5" ).digest( string.getBytes( "UTF-8" ) );
+        } catch ( NoSuchAlgorithmException e ) {
+            throw new RuntimeException( "Huh, MD5 should be supported?", e );
+        } catch ( UnsupportedEncodingException e ) {
+            throw new RuntimeException( "Huh, UTF-8 should be supported?", e );
         }
 
-        StringBuilder hex = new StringBuilder(hash.length * 2);
-        for (byte b : hash) {
-            if ((b & 0xFF) < 0x10) hex.append("0");
-            hex.append(Integer.toHexString(b & 0xFF));
+        StringBuilder hex = new StringBuilder( hash.length * 2 );
+        for ( byte b : hash ) {
+            if ( ( b & 0xFF ) < 0x10 ) hex.append( "0" );
+            hex.append( Integer.toHexString( b & 0xFF ) );
         }
         return hex.toString();
+    }
+
+    public static String currentTime() {
+        Date date = new Date( System.currentTimeMillis() );
+        DateFormat dataFormat = new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss", Locale.SIMPLIFIED_CHINESE );
+        return dataFormat.format( date );
     }
 
 }

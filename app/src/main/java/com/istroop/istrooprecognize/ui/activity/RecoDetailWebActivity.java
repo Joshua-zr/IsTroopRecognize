@@ -1,6 +1,7 @@
 package com.istroop.istrooprecognize.ui.activity;
 
 import android.annotation.SuppressLint;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -51,8 +52,7 @@ public class RecoDetailWebActivity extends BaseActivity {
             @Override
             public boolean shouldOverrideUrlLoading( WebView view, String url ) {
                 view.loadUrl( url );
-                Utils.log( TAG, "shouldOverrideUrlLoading", 4 );
-                return super.shouldOverrideUrlLoading( view, url );
+                return false;
             }
 
             @Override
@@ -72,24 +72,25 @@ public class RecoDetailWebActivity extends BaseActivity {
             public void onReceivedTitle( WebView view, String title ) {
                 super.onReceivedTitle( view, title );
             }
-
         } );
 
         getWebHtml();
     }
 
     private void initWebView() {
-
-        myWeb.getSettings().setJavaScriptEnabled( true );
+        WebSettings settings = myWeb.getSettings();
+        settings.setJavaScriptEnabled( true );
+        settings.setAllowFileAccess( true );
+        settings.setPluginState( WebSettings.PluginState.ON );
         myWeb.requestFocus();
-        myWeb.getSettings().setRenderPriority( WebSettings.RenderPriority.HIGH );
-//        myWeb.getSettings().setCacheMode( WebSettings.LOAD_DEFAULT );  //设置 缓存模式
-        myWeb.getSettings().setCacheMode( WebSettings.LOAD_NO_CACHE );
-        myWeb.getSettings().setUseWideViewPort( true );
-        myWeb.getSettings().setLoadWithOverviewMode( true );
-        myWeb.getSettings().setAppCacheEnabled( false );
-        // 开启 DOM storage API 功能  
-//        myWeb.getSettings().setDomStorageEnabled( true );
+        settings.setRenderPriority( WebSettings.RenderPriority.HIGH );
+//        settings.setCacheMode( WebSettings.LOAD_DEFAULT );  //设置 缓存模式
+        settings.setCacheMode( WebSettings.LOAD_NO_CACHE );
+        settings.setUseWideViewPort( true );
+        settings.setLoadWithOverviewMode( true );
+        settings.setAppCacheEnabled( false );
+        //开启 DOM storage API 功能
+        settings.setDomStorageEnabled( true );
         //开启 database storage API 功能  
 //        myWeb.getSettings().setDatabaseEnabled( true );
 //        String cacheDirPath = getFilesDir().getAbsolutePath() + APP_CACAHE_DIRNAME;
@@ -117,6 +118,18 @@ public class RecoDetailWebActivity extends BaseActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        myWeb.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        myWeb.onPause();
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
         Utils.log( TAG, "onStop", 6 );
@@ -127,7 +140,7 @@ public class RecoDetailWebActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-//        clearWebViewCache();
+        clearWebViewCache();
     }
 
     /**

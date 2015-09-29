@@ -1,6 +1,8 @@
 package com.istroop.istrooprecognize;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -37,6 +39,7 @@ public class WMDHandler extends Handler {
                 int width = msg.arg1;
                 int height = msg.arg2;
                 int wm_id = AndroidWMDetector.detect( data, width, height );
+//                int wm_id = -1;
                 Utils.log( TAG, "data.length:" + data.length + "   水印id:" + wm_id + "   width:" + width + "   height:" + height, 5 );
                 if ( wm_id < 0 ) {
                     Message response = Message.obtain( mMainHandler,

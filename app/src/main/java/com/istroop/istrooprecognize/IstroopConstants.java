@@ -26,7 +26,6 @@ public class IstroopConstants {
 
     public final static int    IAMessages_SUB_FLAG_NO_WATERMARK = 101;
     public final static int    IAMessages_SUB_WATERMARK_ID      = 2;
-    public static final int    WINDOW_WIDTH                     = 0;
     public static final String ICHAOTU_URL                      = "http://api.ichaotu.com";
     public static final String URL_OTHER_LOGIN                  = "/Mobile/login";
     public static final String URL_PATH                         = "http://api.ichaotu.com";

@@ -17,7 +17,12 @@ public class WMDetectorThread extends Thread {
     }
 
     public Handler getHandler() {
-        return this.mHandler;
+        return mHandler;
+    }
+
+    //TODO 临时方法
+    public Activity getActivity() {
+        return fragment;
     }
 
     @Override
