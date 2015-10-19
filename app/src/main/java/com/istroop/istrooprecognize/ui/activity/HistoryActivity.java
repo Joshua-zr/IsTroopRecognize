@@ -34,7 +34,6 @@ import com.istroop.istrooprecognize.MyApplication;
 import com.istroop.istrooprecognize.R;
 import com.istroop.istrooprecognize.utils.BitmapUtil;
 import com.istroop.istrooprecognize.utils.HisDBHelper;
-import com.istroop.istrooprecognize.utils.HttpTools;
 import com.istroop.istrooprecognize.utils.ImageAsyncTask;
 import com.istroop.istrooprecognize.utils.Okhttps;
 import com.istroop.istrooprecognize.utils.OnTabActivityResultListener;
@@ -361,9 +360,6 @@ public class HistoryActivity extends BaseActivity implements OnClickListener,
                 // TODO
                 Log.i( TAG, "历史记录:" + histories );
                 if ( histories != null ) {
-                    System.out.println( histories );
-                }
-                if ( histories != null ) {
                     if ( "联网失败".equals( histories ) ) {
                         Message message = Message.obtain();
                         message.what = HIS_FAIL;
@@ -522,12 +518,10 @@ public class HistoryActivity extends BaseActivity implements OnClickListener,
                                                     .getJSONObject( "0" );
                                             String fileid = headInfo
                                                     .getString( "fileid" );
-                                            String set_sign = HttpTools
-                                                    .userInfo(
-                                                            IstroopConstants.URL_PATH
-                                                                    + "/Mobile/setinfo?bg_img="
-                                                                    + fileid,
-                                                            IstroopConstants.cookieStore );
+                                            String set_sign = okhttps.get(
+                                                    IstroopConstants.URL_PATH
+                                                            + "/Mobile/setinfo?bg_img="
+                                                            + fileid );
                                             JSONObject jsonObject = new JSONObject(
                                                     set_sign );
                                             String data1 = null;
@@ -546,7 +540,7 @@ public class HistoryActivity extends BaseActivity implements OnClickListener,
                                             message.obj = data1;
                                             handler.sendMessage( message );
                                         }
-                                    } catch ( JSONException e ) {
+                                    } catch ( JSONException | IOException e ) {
                                         e.printStackTrace();
                                     }
                                 } );
@@ -718,13 +712,11 @@ public class HistoryActivity extends BaseActivity implements OnClickListener,
                 } else {
                     new Thread() {
                         public void run() {
-                            String delInfo = HttpTools.userInfo(
-                                    IstroopConstants.URL_PATH
-                                            + "/ICard/delHistory/?pid="
-                                            + wm_pid,
-                                    IstroopConstants.cookieStore );
-                            if ( delInfo != null ) {
-                                try {
+                            try {
+                                String delInfo = okhttps.get( IstroopConstants.URL_PATH
+                                                                      + "/ICard/delHistory/?pid="
+                                                                      + wm_pid );
+                                if ( delInfo != null ) {
                                     JSONObject object = new JSONObject( delInfo );
                                     if ( object.getBoolean( "success" ) ) {
                                         arrayList.remove( position );
@@ -735,9 +727,9 @@ public class HistoryActivity extends BaseActivity implements OnClickListener,
                                     } else {
                                         Log.i( TAG, "删除失败" );
                                     }
-                                } catch ( JSONException e ) {
-                                    e.printStackTrace();
                                 }
+                            } catch ( JSONException | IOException e ) {
+                                e.printStackTrace();
                             }
                         }
                     }.start();
@@ -788,12 +780,9 @@ public class HistoryActivity extends BaseActivity implements OnClickListener,
                                                     .getString( "savename" );
                                             String fileid = "group1" + savename;
                                             Log.i( TAG, "fildid:" + fileid );
-                                            String set_sign = HttpTools
-                                                    .userInfo(
-                                                            IstroopConstants.URL_PATH
-                                                                    + "/Mobile/setinfo?bg_img="
-                                                                    + fileid,
-                                                            IstroopConstants.cookieStore );
+                                            String set_sign = okhttps.get( IstroopConstants.URL_PATH
+                                                                                   + "/Mobile/setinfo?bg_img="
+                                                                                   + fileid );
                                             JSONObject jsonObject = new JSONObject(
                                                     set_sign );
                                             String data1 = null;
@@ -812,7 +801,7 @@ public class HistoryActivity extends BaseActivity implements OnClickListener,
                                             message.obj = data1;
                                             handler.sendMessage( message );
                                         }
-                                    } catch ( JSONException e ) {
+                                    } catch ( JSONException | IOException e ) {
                                         e.printStackTrace();
                                     }
                                 } );

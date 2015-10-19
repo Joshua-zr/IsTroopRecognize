@@ -9,8 +9,6 @@ import android.widget.Checkable;
 import com.istroop.istrooprecognize.bean.User;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 
-import org.apache.http.client.CookieStore;
-
 
 @SuppressLint( "SdCardPath" )
 public class IstroopConstants {
@@ -33,7 +31,6 @@ public class IstroopConstants {
     public static boolean     isSound;
     public static boolean     isVibrator;
     public static boolean     isLogin;
-    public static CookieStore cookieStore;
     private final static int      maxMemory = ( int ) Runtime.getRuntime().maxMemory();
     private final static int      cacheSize = maxMemory / 5;//只分5分之一用来做图片缓存
     public static        LruCache mLruCache = new LruCache<String, Bitmap>(
@@ -79,7 +76,6 @@ public class IstroopConstants {
     public static String openid;
 
     public static User        admin;
-    public static CookieStore cookiestore;
     public static IWXAPI      api;
     public static String APP_ID = "wxb272fda9c4623c5f";
 

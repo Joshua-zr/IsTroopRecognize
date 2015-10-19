@@ -238,26 +238,26 @@ public class CameraPreview implements PreviewCallback {
         return argb;
     }
 
-    private int zoomWidth;
-    private int zoomHeight;
-
-    public int[] getMatrix( int[] rgb ) {
-
-        zoomWidth = Utils.dip2px( mDetectorThd.getActivity(), 100 );
-        zoomHeight = mPreviewHeight - Utils.dip2px( mDetectorThd.getActivity(), 50 );
-
-        int area = zoomWidth * zoomHeight;
-        int[] matrix = new int[area];
-        int inputOffset = Utils.dip2px( mDetectorThd.getActivity(), 25 ) * mPreviewWidth
-                + Utils.dip2px( mDetectorThd.getActivity(), 120 );
-        Utils.log( TAG, "rgb.length : " + rgb.length + "   inputOffset : " + inputOffset +
-                "   matrix.length : " + matrix.length, 5 );
-        // Otherwise copy one cropped row at a time.
-        for ( int y = 0; y < zoomHeight; y++ ) {
-            int outputOffset = y * zoomWidth;
-            System.arraycopy( rgb, inputOffset, matrix, outputOffset, zoomWidth );
-            inputOffset += mPreviewWidth;
-        }
-        return matrix;
-    }
+//    private int zoomWidth;
+//    private int zoomHeight;
+//
+//    public int[] getMatrix( int[] rgb ) {
+//
+//        zoomWidth = Utils.dip2px( mDetectorThd.getActivity(), 100 );
+//        zoomHeight = mPreviewHeight - Utils.dip2px( mDetectorThd.getActivity(), 50 );
+//
+//        int area = zoomWidth * zoomHeight;
+//        int[] matrix = new int[area];
+//        int inputOffset = Utils.dip2px( mDetectorThd.getActivity(), 25 ) * mPreviewWidth
+//                + Utils.dip2px( mDetectorThd.getActivity(), 120 );
+//        Utils.log( TAG, "rgb.length : " + rgb.length + "   inputOffset : " + inputOffset +
+//                "   matrix.length : " + matrix.length, 5 );
+//        // Otherwise copy one cropped row at a time.
+//        for ( int y = 0; y < zoomHeight; y++ ) {
+//            int outputOffset = y * zoomWidth;
+//            System.arraycopy( rgb, inputOffset, matrix, outputOffset, zoomWidth );
+//            inputOffset += mPreviewWidth;
+//        }
+//        return matrix;
+//    }
 }

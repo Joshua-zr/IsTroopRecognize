@@ -101,7 +101,7 @@ public class AutoFocusManager implements Camera.AutoFocusCallback {
             try {
                 Thread.sleep( AUTO_FOCUS_INTERVAL_MS );
             } catch ( InterruptedException e ) {
-                e.printStackTrace();
+                Thread.interrupted();
             }
             start();
             return null;

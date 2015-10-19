@@ -2,6 +2,7 @@ package com.istroop.istrooprecognize.ui.activity;
 
 import android.app.TabActivity;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;

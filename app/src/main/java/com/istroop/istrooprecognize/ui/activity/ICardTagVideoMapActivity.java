@@ -21,7 +21,7 @@ import android.widget.Toast;
 import com.istroop.istrooprecognize.BaseActivity;
 import com.istroop.istrooprecognize.IstroopConstants;
 import com.istroop.istrooprecognize.R;
-import com.istroop.istrooprecognize.utils.HttpTools;
+import com.istroop.istrooprecognize.utils.Okhttps;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -58,6 +58,8 @@ public class ICardTagVideoMapActivity extends BaseActivity implements
     private String[]     contents;
     private int position = 3;
 
+    private Okhttps okhttps;
+
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
         super.onCreate( savedInstanceState );
@@ -66,6 +68,7 @@ public class ICardTagVideoMapActivity extends BaseActivity implements
     }
 
     public void init() {
+        okhttps = Okhttps.getInstance();
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         type = bundle.getString( "type", "类型" );
@@ -190,21 +193,17 @@ public class ICardTagVideoMapActivity extends BaseActivity implements
         new Thread() {
             public void run() {
                 // /ICard/setdefaulttag?default=1&content[title]=**&type=text&tid=***
-                String info;
-                if ( contents != null && contents.length != 0 ) {
-                    // 修改标记
-                    info = HttpTools.userInfo( IstroopConstants.URL_PATH
-                                                       + "/ICard/setdefaulttag?default=1" + temp + "&tid="
-                                                       + contents[0], IstroopConstants.cookieStore );
-                } else {
-                    info = HttpTools.userInfo( IstroopConstants.URL_PATH
-                                                       + "/ICard/setdefaulttag?default=1" + temp,
-                                               IstroopConstants.cookieStore );
-                }
-                if ( !TextUtils.isEmpty( info ) ) {
-                    Log.i( TAG, "添加标记返回的信息:" + info );
-                    // 添加标记返回的信息:{"success":true,"data":"\u8bbe\u7f6e\u6210\u529f"}
-                    try {
+                String info = null;
+                try {
+                    if ( contents != null && contents.length != 0 ) {
+                        // 修改标记
+                        info = okhttps.get( IstroopConstants.URL_PATH
+                                                    + "/ICard/setdefaulttag?default=1" + temp + "&tid="
+                                                    + contents[0] );
+                    }
+                    if ( !TextUtils.isEmpty( info ) ) {
+                        Log.i( TAG, "添加标记返回的信息:" + info );
+                        // 添加标记返回的信息:{"success":true,"data":"\u8bbe\u7f6e\u6210\u529f"}
                         JSONObject object = new JSONObject( info );
                         if ( object.getBoolean( "success" ) ) {
                             String data = object.getString( "data" );
@@ -213,16 +212,18 @@ public class ICardTagVideoMapActivity extends BaseActivity implements
                             message.what = TAG_video_ADD_SUCCESS;
                             handler.sendMessage( message );
                         }
-                    } catch ( JSONException e ) {
-                        e.printStackTrace();
+                    } else {
                         Message message = Message.obtain();
-                        message.what = TAG_video_ADD_FAIL;
+                        message.what = TAG_video_ADD_NULL;
                         handler.sendMessage( message );
                     }
-                } else {
+                } catch ( JSONException e ) {
+                    e.printStackTrace();
                     Message message = Message.obtain();
-                    message.what = TAG_video_ADD_NULL;
+                    message.what = TAG_video_ADD_FAIL;
                     handler.sendMessage( message );
+                } catch ( IOException e ) {
+                    e.printStackTrace();
                 }
             }
         }.start();
@@ -239,10 +240,10 @@ public class ICardTagVideoMapActivity extends BaseActivity implements
                 }
                 try {
                     String encode = URLEncoder.encode( keyword, "UTF-8" );
-                    String result = HttpTools
-                            .toString( IstroopConstants.URL_PATH
-                                               + "/util/youku?keyword=" + encode
-                                               + "&page=1&count=15" );
+                    String result = okhttps.get(
+                            IstroopConstants.URL_PATH
+                                    + "/util/youku?keyword=" + encode
+                                    + "&page=1&count=15" );
                     if ( result == null ) {
                         Message message = Message.obtain();
                         message.what = TAG_RESULT_ERROR;

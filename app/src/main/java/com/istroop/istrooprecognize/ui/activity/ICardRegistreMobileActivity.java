@@ -18,7 +18,7 @@ import android.widget.Toast;
 import com.istroop.istrooprecognize.BaseActivity;
 import com.istroop.istrooprecognize.IstroopConstants;
 import com.istroop.istrooprecognize.R;
-import com.istroop.istrooprecognize.utils.HttpTools;
+import com.istroop.istrooprecognize.utils.Okhttps;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,6 +28,7 @@ import java.io.IOException;
 public class ICardRegistreMobileActivity extends BaseActivity implements
         OnClickListener {
 
+    private Okhttps okhttps;
     protected static final String TAG = "ICardRegistreMobileActivity";
 
     protected static final int REGISTER_SEND_SUCCESS  = 1;
@@ -72,6 +73,8 @@ public class ICardRegistreMobileActivity extends BaseActivity implements
     }
 
     public void init() {
+        okhttps = Okhttps.getInstance();
+
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         if ( bundle != null ) {
@@ -156,17 +159,23 @@ public class ICardRegistreMobileActivity extends BaseActivity implements
                                                 String string;
                                                 if ( "找回密码"
                                                         .equals( mobile_findpwd ) ) {
-                                                    string = HttpTools
-                                                            .toString( IstroopConstants.URL_PATH
-                                                                               + "/Mobile/ForgetPass?mobile="
-                                                                               + mobile );
+                                                    string = okhttps.get( IstroopConstants.URL_PATH
+                                                                                  + "/Mobile/ForgetPass?mobile="
+                                                                                  + mobile );
+//                                                            HttpTools
+//                                                            .toString( IstroopConstants.URL_PATH
+//                                                                               + "/Mobile/ForgetPass?mobile="
+//                                                                               + mobile );
                                                     Log.i( TAG, "找回密码返回的信息:"
                                                             + string );
                                                 } else {
-                                                    string = HttpTools
-                                                            .toString( IstroopConstants.URL_PATH
-                                                                               + "/Mobile/MobileCodeSend/?mobile="
-                                                                               + mobile );
+                                                    string = okhttps.get( IstroopConstants.URL_PATH
+                                                                                  + "/Mobile/MobileCodeSend/?mobile="
+                                                                                  + mobile );
+//                                                            HttpTools
+//                                                            .toString( IstroopConstants.URL_PATH
+//                                                                               + "/Mobile/MobileCodeSend/?mobile="
+//                                                                               + mobile );
                                                 }
                                                 if ( TextUtils.isEmpty( string ) ) {
                                                     Message message = Message
@@ -194,7 +203,7 @@ public class ICardRegistreMobileActivity extends BaseActivity implements
                                                     message.obj = data;
                                                     handler.sendMessage( message );
                                                 }
-                                            } catch ( IOException | JSONException e ) {
+                                            } catch ( JSONException | IOException e ) {
                                                 e.printStackTrace();
                                             }
                                         }

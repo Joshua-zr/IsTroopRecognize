@@ -2,7 +2,6 @@ package com.istroop.istrooprecognize;
 
 import android.app.Activity;
 import android.os.Bundle;
-
 import com.umeng.analytics.MobclickAgent;
 
 /**

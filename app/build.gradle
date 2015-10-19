@@ -18,7 +18,7 @@ repositories {
 }
 
 android {
-    compileSdkVersion 22
+    compileSdkVersion 23
     buildToolsVersion "22.0.1"
 
     compileOptions {
@@ -41,7 +41,7 @@ android {
         config {
             keyAlias 'istroop_pic_ichaotu'
             keyPassword '15833407015'
-            storeFile file('/home/joshua-zr/Project/keystore/IsTroopRecognizePic.keystore')
+            storeFile file('/home/joshua-zr/Projects/m-android/keystore/IsTroopRecognizePic.keystore')
             storePassword '15833407015'
         }
     }
@@ -49,56 +49,56 @@ android {
     defaultConfig {
         applicationId "com.istroop.istrooprecognize"
         minSdkVersion 15
-        targetSdkVersion 22
+        targetSdkVersion 23
         versionCode 13
         versionName "2.6.1"
-        manifestPlaceholders = [UMENG_CHANNEL_VALUE: "umeng"]
+//        manifestPlaceholders = [UMENG_CHANNEL_VALUE: "umeng"]
     }
 
     buildTypes {
         release {
             minifyEnabled false
-            debuggable false
+            debuggable true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.config
         }
     }
 
-    packagingOptions {
-        exclude 'META-INF/LICENSE'
-        exclude 'META-INF/DEPENDENCIES'
-        exclude 'META-INF/NOTICE'
-    }
-
-    productFlavors {
-        xiaomi {
-            manifestPlaceholders = [UMENG_CHANNEL_ID: "xiaomi"]
-        }
-        qihoo {
-            manifestPlaceholders = [UMENG_CHANNEL_ID: "qihoo"]
-        }
-        baidu {
-            manifestPlaceholders = [UMENG_CHANNEL_ID: "baidu"]
-        }
-        wandoujia {
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "wandoujia"]
-        }
-        qq {
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "qq"]
-        }
-    }
+//    packagingOptions {
+//        exclude 'META-INF/LICENSE'
+//        exclude 'META-INF/DEPENDENCIES'
+//        exclude 'META-INF/NOTICE'
+//    }
+//
+//    productFlavors {
+//        xiaomi {
+//            manifestPlaceholders = [UMENG_CHANNEL_ID: "xiaomi"]
+//        }
+//        qihoo {
+//            manifestPlaceholders = [UMENG_CHANNEL_ID: "qihoo"]
+//        }
+//        baidu {
+//            manifestPlaceholders = [UMENG_CHANNEL_ID: "baidu"]
+//        }
+//        wandoujia {
+//            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "wandoujia"]
+//        }
+//        qq {
+//            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "qq"]
+//        }
+//    }
 }
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:22.2.1'
+    compile 'com.android.support:appcompat-v7:23.0.1'
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.squareup.okhttp:okhttp:2.4.0'
     compile 'com.squareup:otto:1.3.8'
+    compile 'com.squareup.retrofit:retrofit:2.0.0-beta2'
+    compile 'io.reactivex:rxjava:1.0.14'
     compile files('libs/libammsdk.jar')
     compile files('libs/xUtils-2.6.14.jar')
-    compile files('libs/apache-mime4j-0.6.jar')
-    compile files('libs/httpmime-4.0.jar')
     compile files('libs/stetho-1.1.1-fatjar.jar')
     compile project(':superImageSDK')
     compile 'com.umeng.analytics:analytics:latest.integration'

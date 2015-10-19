@@ -22,7 +22,6 @@ import com.istroop.istrooprecognize.ui.activity.RecoDetailTextActivity;
 import com.istroop.istrooprecognize.ui.activity.RecoDetailWebActivity;
 import com.istroop.istrooprecognize.ui.fragment.RecoFragment;
 import com.istroop.istrooprecognize.utils.HisDBHelper;
-import com.istroop.istrooprecognize.utils.HttpTools;
 import com.istroop.istrooprecognize.utils.Okhttps;
 import com.istroop.istrooprecognize.utils.Utils;
 import com.istroop.openapi.Constant;
@@ -173,29 +172,28 @@ public class MainHandler extends Handler {
                             new Thread() {
                                 @Override
                                 public void run() {
-                                    hisInfo = HttpTools.userInfo(
-                                            IstroopConstants.URL_PATH
-                                                    + "/ICard/setHistory/?pid="
-                                                    + dB_pid + "&params[wmid]="
-                                                    + DB_wm_id
-                                                    + "&params[Type]="
-                                                    + DB_tag_type
-                                                    + "&params[Title]="
-                                                    + DB_tag_title.trim()
-                                                    + "&params[Createtime]="
-                                                    + DB_mtime
-                                                    + "&params[Desc]="
-                                                    + DB_tag_desc
-                                                    + "&params[Link]="
-                                                    + DB_tag_url
-                                                    + "&params[Address]="
-                                                    + DB_location
-                                                    + "&params[PicUrl]="
-                                                    + DB_fileurl,
-                                            IstroopConstants.cookieStore );
-//									LogUtil.i(TAG, "历史记录更新服务器" + hisInfo);
-                                    if ( hisInfo != null ) {
-                                        try {
+                                    Okhttps okhttps = Okhttps.getInstance();
+                                    try {
+                                        okhttps.get( IstroopConstants.URL_PATH
+                                                             + "/ICard/setHistory/?pid="
+                                                             + dB_pid + "&params[wmid]="
+                                                             + DB_wm_id
+                                                             + "&params[Type]="
+                                                             + DB_tag_type
+                                                             + "&params[Title]="
+                                                             + DB_tag_title.trim()
+                                                             + "&params[Createtime]="
+                                                             + DB_mtime
+                                                             + "&params[Desc]="
+                                                             + DB_tag_desc
+                                                             + "&params[Link]="
+                                                             + DB_tag_url
+                                                             + "&params[Address]="
+                                                             + DB_location
+                                                             + "&params[PicUrl]="
+                                                             + DB_fileurl );
+
+                                        if ( hisInfo != null ) {
                                             JSONObject jsonObject = new JSONObject( hisInfo );
                                             if ( jsonObject
                                                     .getBoolean( "success" ) ) {
@@ -209,9 +207,9 @@ public class MainHandler extends Handler {
                                                 message.what = RecoFragment.HIS_ADD_FAIL;
                                                 mHandler.sendMessage( message );
                                             }
-                                        } catch ( JSONException e ) {
-                                            e.printStackTrace();
                                         }
+                                    } catch ( JSONException | IOException e ) {
+                                        e.printStackTrace();
                                     }
                                 }
                             }.start();
@@ -224,26 +222,24 @@ public class MainHandler extends Handler {
                                 DB_tag_title = replaceBlank( DB_tag_title );
                                 DB_tag_desc = replaceBlank( DB_tag_desc );
                                 DB_location = replaceBlank( DB_location );
-                                hisInfo = HttpTools.userInfo(
-                                        IstroopConstants.URL_PATH
-                                                + "/ICard/setHistory/?"
-                                                + "params[wmid]=" + DB_wm_id
-                                                + "&params[Type]="
-                                                + DB_tag_type
-                                                + "&params[Title]="
-                                                + DB_tag_title.split( " " )[0]
-                                                + "&params[Createtime]="
-                                                + DB_mtime + "&params[Desc]="
-                                                + DB_tag_desc
-                                                + "&params[Link]=" + DB_tag_url
-                                                + "&params[Address]="
-                                                + DB_location
-                                                + "&params[PicUrl]="
-                                                + DB_fileurl,
-                                        IstroopConstants.cookieStore );
-//								LogUtil.i(TAG, "历史记录传入服务器" + hisInfo);
-                                if ( hisInfo != null ) {
-                                    try {
+                                Okhttps okhttps = Okhttps.getInstance();
+                                try {
+                                    okhttps.get( IstroopConstants.URL_PATH
+                                                         + "/ICard/setHistory/?"
+                                                         + "params[wmid]=" + DB_wm_id
+                                                         + "&params[Type]="
+                                                         + DB_tag_type
+                                                         + "&params[Title]="
+                                                         + DB_tag_title.split( " " )[0]
+                                                         + "&params[Createtime]="
+                                                         + DB_mtime + "&params[Desc]="
+                                                         + DB_tag_desc
+                                                         + "&params[Link]=" + DB_tag_url
+                                                         + "&params[Address]="
+                                                         + DB_location
+                                                         + "&params[PicUrl]="
+                                                         + DB_fileurl );
+                                    if ( hisInfo != null ) {
                                         JSONObject jsonObject = new JSONObject(
                                                 hisInfo );
                                         if ( jsonObject.getBoolean( "success" ) ) {
@@ -255,9 +251,9 @@ public class MainHandler extends Handler {
                                             message.what = RecoFragment.HIS_ADD_FAIL;
                                             mHandler.sendMessage( message );
                                         }
-                                    } catch ( JSONException e ) {
-                                        e.printStackTrace();
                                     }
+                                } catch ( JSONException | IOException e ) {
+                                    e.printStackTrace();
                                 }
                             }
                         }.start();
@@ -375,7 +371,7 @@ public class MainHandler extends Handler {
     }
 
     public void loadPicInfo( final int recoResult ) {
-
+        Okhttps okhttps = Okhttps.getInstance();
 //		LogUtil.i(TAG, "是否声音:" + IstroopConstants.isSound + "是否震动:"
 //				+ IstroopConstants.isVibrator);
         Message msg = new Message();
@@ -402,14 +398,16 @@ public class MainHandler extends Handler {
         String picurlStr = IstroopConstants.URL_PATH + "/ICard/getInfo/?wmid="
                 + DB_wm_id;
 //		LogUtil.i(TAG, "picurlStr:" + picurlStr);
-        String picResult;
+        String picResult = null;
 
         try {
             if ( IstroopConstants.isLogin ) {
-                picResult = HttpTools.userInfo( picurlStr,
-                                                IstroopConstants.cookieStore );
+                picResult = okhttps.get( picurlStr );
+//                picResult = HttpTools.userInfo( picurlStr,
+//                                                IstroopConstants.cookieStore );
             } else {
-                picResult = HttpTools.toString( picurlStr );
+                picResult = okhttps.get( picurlStr );
+//                picResult = HttpTools.toString( picurlStr );
             }
 //			LogUtil.i(TAG, "picResult:" + picResult);
             try {

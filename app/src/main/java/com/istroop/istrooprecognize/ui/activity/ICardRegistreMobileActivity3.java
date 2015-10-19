@@ -15,22 +15,24 @@ import android.widget.Toast;
 import com.istroop.istrooprecognize.BaseActivity;
 import com.istroop.istrooprecognize.IstroopConstants;
 import com.istroop.istrooprecognize.R;
-import com.istroop.istrooprecognize.utils.HttpTools;
+import com.istroop.istrooprecognize.utils.Okhttps;
 import com.istroop.istrooprecognize.utils.Utils;
 import com.istroop.istrooprecognize.utils.WidgetUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+
 public class ICardRegistreMobileActivity3 extends BaseActivity implements
         OnClickListener {
-    protected static final String TAG = "ICardRegistreMobileActivity3";
-
-    protected static final int MOBILE_REG_SUCCESS    = 1;
-    protected static final int MOBILE_REG_FAIL       = 2;
-    protected static final int MOBILE_REG_ERROR_JSON = 4;
-    protected static final int MOBILE_RESET_SUCCESS  = 5;
-    protected static final int MOBILE_RESET_FAIL     = 6;
+    protected static final String TAG                   = "ICardRegistreMobileActivity3";
+    protected static final int    MOBILE_REG_SUCCESS    = 1;
+    protected static final int    MOBILE_REG_FAIL       = 2;
+    protected static final int    MOBILE_REG_ERROR_JSON = 4;
+    protected static final int    MOBILE_RESET_SUCCESS  = 5;
+    protected static final int    MOBILE_RESET_FAIL     = 6;
+    private Okhttps        okhttps;
     private EditText       icard_register_mobile_pwd;
     private String         mobile;
     private String         mobile_findpwd;
@@ -46,6 +48,7 @@ public class ICardRegistreMobileActivity3 extends BaseActivity implements
     }
 
     public void init() {
+        okhttps = Okhttps.getInstance();
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         if ( bundle != null ) {
@@ -135,12 +138,17 @@ public class ICardRegistreMobileActivity3 extends BaseActivity implements
                 try {
                     if ( "找回密码".equals( mobile_findpwd ) ) {
                         // /Mobile/ForgetPass/?mobile=%@&code=%@&password=%@
-                        String regInfo = HttpTools.login(
+                        String regInfo = okhttps.get(
                                 IstroopConstants.URL_PATH
                                         + "/Mobile/ResetPass/?mobile=" + mobile
                                         + "&code=" + code + "&password="
-                                        + password,
-                                IstroopConstants.cookieStore );
+                                        + password );
+//                                HttpTools.login(
+//                                IstroopConstants.URL_PATH
+//                                        + "/Mobile/ResetPass/?mobile=" + mobile
+//                                        + "&code=" + code + "&password="
+//                                        + password,
+//                                IstroopConstants.cookieStore );
                         Utils.log( TAG, IstroopConstants.URL_PATH
                                 + "/Mobile/ResetPass/?mobile=" + mobile
                                 + "&code=" + code + "&password=" + password, 4 );
@@ -162,12 +170,17 @@ public class ICardRegistreMobileActivity3 extends BaseActivity implements
                             handler.sendMessage( msg );
                         }
                     } else {
-                        String regInfo = HttpTools.login(
+                        String regInfo = okhttps.get(
                                 IstroopConstants.URL_PATH
                                         + "/Mobile/MobileReg/?mobile=" + mobile
                                         + "&code=" + code + "&password="
-                                        + password,
-                                IstroopConstants.cookieStore );
+                                        + password );
+//                                HttpTools.login(
+//                                IstroopConstants.URL_PATH
+//                                        + "/Mobile/MobileReg/?mobile=" + mobile
+//                                        + "&code=" + code + "&password="
+//                                        + password,
+//                                IstroopConstants.cookieStore );
                         Utils.log( TAG, IstroopConstants.URL_PATH
                                 + "/Mobile/MobileReg/?mobile=" + mobile
                                 + "&code=" + code + "&password=" + password, 4 );
@@ -199,6 +212,8 @@ public class ICardRegistreMobileActivity3 extends BaseActivity implements
                     Message message = Message.obtain();
                     message.what = MOBILE_REG_ERROR_JSON;
                     handler.sendMessage( message );
+                } catch ( IOException e ) {
+                    e.printStackTrace();
                 }
             }
         }.start();

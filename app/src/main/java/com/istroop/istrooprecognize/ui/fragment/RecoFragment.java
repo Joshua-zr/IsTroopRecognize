@@ -25,7 +25,6 @@ import com.istroop.istrooprecognize.R;
 import com.istroop.istrooprecognize.WMDetectorThread;
 import com.istroop.istrooprecognize.utils.CameraManager;
 import com.istroop.istrooprecognize.utils.CameraPreview;
-import com.istroop.istrooprecognize.utils.HttpTools;
 import com.istroop.istrooprecognize.utils.Utils;
 
 import org.json.JSONException;
@@ -279,29 +278,29 @@ public class RecoFragment extends BaseFragment implements SurfaceHolder.Callback
         String picurlStr = IstroopConstants.URL_PATH + "/ICard/getInfo/?wmid="
                 + DB_wm_id;
 //		LogUtil.i(TAG, "picurlStr:" + picurlStr);
-        String picResult;
+        String picResult = null;
 
         try {
             if ( IstroopConstants.isLogin ) {
-                picResult = HttpTools.userInfo( picurlStr,
-                                                IstroopConstants.cookieStore );
+//                picResult = HttpTools.userInfo( picurlStr,
+//                                                IstroopConstants.cookieStore );
             } else {
-                picResult = HttpTools.toString( picurlStr );
+//                picResult = HttpTools.toString( picurlStr );
             }
 //			LogUtil.i(TAG, "picResult:" + picResult);
             try {
-                if ( picResult == null ) {
-                    // 重新扫描数据
-                    Message message = main_handler.obtainMessage();
-                    message.what = IstroopConstants.IAMessages_RESULT_NULL;
-                    main_handler.sendMessage( message );
-                    return;
-                } else if ( "联网失败".equals( picResult ) ) {
-                    Message message = main_handler.obtainMessage();
-                    message.what = IstroopConstants.IAMessages_NETWORK_ERROR;
-                    main_handler.sendMessage( message );
-                    return;
-                }
+//                if ( picResult == null ) {
+//                    // 重新扫描数据
+//                    Message message = main_handler.obtainMessage();
+//                    message.what = IstroopConstants.IAMessages_RESULT_NULL;
+//                    main_handler.sendMessage( message );
+//                    return;
+//                } else if ( "联网失败".equals( picResult ) ) {
+//                    Message message = main_handler.obtainMessage();
+//                    message.what = IstroopConstants.IAMessages_NETWORK_ERROR;
+//                    main_handler.sendMessage( message );
+//                    return;
+//                }
 
                 JSONObject resultObject = new JSONObject( picResult );
 //				LogUtil.i(TAG, resultObject + "resultObject");

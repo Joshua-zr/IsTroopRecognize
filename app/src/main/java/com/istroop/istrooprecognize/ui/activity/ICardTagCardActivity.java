@@ -18,13 +18,14 @@ import com.istroop.istrooprecognize.BaseActivity;
 import com.istroop.istrooprecognize.IstroopConstants;
 import com.istroop.istrooprecognize.R;
 import com.istroop.istrooprecognize.utils.BroadcastHelper;
-import com.istroop.istrooprecognize.utils.HttpTools;
+import com.istroop.istrooprecognize.utils.Okhttps;
 import com.istroop.istrooprecognize.utils.Utils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -70,6 +71,7 @@ public class ICardTagCardActivity extends BaseActivity implements OnClickListene
     private String[] copyrights;
     private String   cards_type;
     private boolean isFirstIn = false;
+    private Okhttps okhttps;
 
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
@@ -79,6 +81,7 @@ public class ICardTagCardActivity extends BaseActivity implements OnClickListene
     }
 
     private void init() {
+        okhttps = Okhttps.getInstance();
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
         if ( extras != null ) {
@@ -148,11 +151,13 @@ public class ICardTagCardActivity extends BaseActivity implements OnClickListene
             public void run() {
                 Log.i( TAG, "进入子线程" );
                 /* cardsList = helper.queryALL(); */
-                String cards = HttpTools.userInfo( IstroopConstants.URL_PATH
-                                                           + "/ICard/MyCard/", IstroopConstants.cookieStore );
-                Log.i( TAG, "获取用户的名片信息:" + cards );
-                if ( cards != null ) {
-                    try {
+                try {
+                    String cards = okhttps.get( IstroopConstants.URL_PATH
+                                                        + "/ICard/MyCard/" );
+// HttpTools.userInfo( IstroopConstants.URL_PATH
+//                     + "/ICard/MyCard/", IstroopConstants.cookieStore );
+                    Log.i( TAG, "获取用户的名片信息:" + cards );
+                    if ( cards != null ) {
                         ICardTagCardsActivity.cardsList = new ArrayList<>();
                         JSONObject object = new JSONObject( cards );
                         if ( object.getBoolean( "success" ) ) {
@@ -209,9 +214,9 @@ public class ICardTagCardActivity extends BaseActivity implements OnClickListene
                             message.what = ICARD_TAG_CARDS_FAIL;
                             handler.sendMessage( message );
                         }
-                    } catch ( JSONException e ) {
-                        e.printStackTrace();
                     }
+                } catch ( JSONException | IOException e ) {
+                    e.printStackTrace();
                 }
             }
         }.start();
@@ -220,11 +225,14 @@ public class ICardTagCardActivity extends BaseActivity implements OnClickListene
     private void getCard() {
         new Thread() {
             public void run() {
-                String cards = HttpTools.userInfo( IstroopConstants.URL_PATH
-                                                           + "/ICard/getCard/?cid=" + card_id,
-                                                   IstroopConstants.cookieStore );
-                if ( cards != null ) {
-                    try {
+                try {
+                    String cards = okhttps.get( IstroopConstants.URL_PATH
+                                                        + "/ICard/getCard/?cid="
+                                                        + card_id );
+//                        HttpTools.userInfo( IstroopConstants.URL_PATH
+//                                                           + "/ICard/getCard/?cid=" + card_id,
+//                                                   IstroopConstants.cookieStore );
+                    if ( cards != null ) {
                         JSONObject object = new JSONObject( cards );
                         if ( object.getBoolean( "success" ) ) {
                             JSONObject jsonObject = object
@@ -266,9 +274,9 @@ public class ICardTagCardActivity extends BaseActivity implements OnClickListene
                             message.what = ICARD_TAG_CARD_FAIL;
                             handler.sendMessage( message );
                         }
-                    } catch ( JSONException e ) {
-                        e.printStackTrace();
                     }
+                } catch ( JSONException | IOException e ) {
+                    e.printStackTrace();
                 }
             }
         }.start();
@@ -379,25 +387,42 @@ public class ICardTagCardActivity extends BaseActivity implements OnClickListene
                     if ( card_id != null ) {
                         new Thread() {
                             public void run() {
-                                String result = HttpTools.userInfo(
-                                        IstroopConstants.URL_PATH
-                                                + "/ICard/setCard/?cid=" + card_id
-                                                + "&params[Name]=" + cards_name
-                                                + "&params[Phone]=" + cards_mobile
-                                                + "&params[Mail]=" + cards_mail
-                                                + "&params[Company]="
-                                                + cards_company
-                                                + "&params[Department]="
-                                                + cards_part + "&params[Position]="
-                                                + cards_job
-                                                + "&params[CompanyWeb]="
-                                                + cards_index + "&params[Address]="
-                                                + cards_address + "&params[Sign]="
-                                                + cards_signature
-                                                + "&params[Weixin]=" + cards_weixin
-                                                + "&is_default=1",
-                                        IstroopConstants.cookieStore );
                                 try {
+                                    String result = okhttps.get(
+                                            IstroopConstants.URL_PATH
+                                                    + "/ICard/setCard/?cid=" + card_id
+                                                    + "&params[Name]=" + cards_name
+                                                    + "&params[Phone]=" + cards_mobile
+                                                    + "&params[Mail]=" + cards_mail
+                                                    + "&params[Company]="
+                                                    + cards_company
+                                                    + "&params[Department]="
+                                                    + cards_part + "&params[Position]="
+                                                    + cards_job
+                                                    + "&params[CompanyWeb]="
+                                                    + cards_index + "&params[Address]="
+                                                    + cards_address + "&params[Sign]="
+                                                    + cards_signature
+                                                    + "&params[Weixin]=" + cards_weixin
+                                                    + "&is_default=1" );
+//                                String result = HttpTools.userInfo(
+//                                        IstroopConstants.URL_PATH
+//                                                + "/ICard/setCard/?cid=" + card_id
+//                                                + "&params[Name]=" + cards_name
+//                                                + "&params[Phone]=" + cards_mobile
+//                                                + "&params[Mail]=" + cards_mail
+//                                                + "&params[Company]="
+//                                                + cards_company
+//                                                + "&params[Department]="
+//                                                + cards_part + "&params[Position]="
+//                                                + cards_job
+//                                                + "&params[CompanyWeb]="
+//                                                + cards_index + "&params[Address]="
+//                                                + cards_address + "&params[Sign]="
+//                                                + cards_signature
+//                                                + "&params[Weixin]=" + cards_weixin
+//                                                + "&is_default=1",
+//                                        IstroopConstants.cookieStore );
                                     if ( result != null ) {
                                         JSONObject object = new JSONObject( result );
                                         if ( object.getBoolean( "success" ) ) {
@@ -410,7 +435,7 @@ public class ICardTagCardActivity extends BaseActivity implements OnClickListene
                                         message.what = ICARD_TAG_CARD_SET_FAIL;
                                         handler.sendMessage( message );
                                     }
-                                } catch ( JSONException e ) {
+                                } catch ( IOException | JSONException e ) {
                                     e.printStackTrace();
                                 }
                             }
@@ -420,25 +445,42 @@ public class ICardTagCardActivity extends BaseActivity implements OnClickListene
                         new Thread() {
                             public void run() {
                                 // 传入数据库http://api.ttfind.so/ICard/setCard/?cid=1&params[title]=**
-                                String result = HttpTools.userInfo(
-                                        IstroopConstants.URL_PATH
-                                                + "/ICard/setCard/?params[Name]="
-                                                + cards_name + "&params[Phone]="
-                                                + cards_mobile + "&params[Mail]="
-                                                + cards_mail + "&params[Company]="
-                                                + cards_company
-                                                + "&params[Department]="
-                                                + cards_part + "&params[Position]="
-                                                + cards_job
-                                                + "&params[CompanyWeb]="
-                                                + cards_index + "&params[Address]="
-                                                + cards_address + "&params[Sign]="
-                                                + cards_signature
-                                                + "&params[Weixin]=" + cards_weixin
-                                                + "&is_default=1",
-                                        IstroopConstants.cookieStore );
-                                Log.i( TAG, "添加用户信息要服务器返回结果:" + result );
+                                String result = null;
                                 try {
+                                    result = okhttps.get(
+                                            IstroopConstants.URL_PATH
+                                                    + "/ICard/setCard/?params[Name]="
+                                                    + cards_name + "&params[Phone]="
+                                                    + cards_mobile + "&params[Mail]="
+                                                    + cards_mail + "&params[Company]="
+                                                    + cards_company
+                                                    + "&params[Department]="
+                                                    + cards_part + "&params[Position]="
+                                                    + cards_job
+                                                    + "&params[CompanyWeb]="
+                                                    + cards_index + "&params[Address]="
+                                                    + cards_address + "&params[Sign]="
+                                                    + cards_signature
+                                                    + "&params[Weixin]=" + cards_weixin
+                                                    + "&is_default=1" );
+// HttpTools.userInfo(
+//                                        IstroopConstants.URL_PATH
+//                                                + "/ICard/setCard/?params[Name]="
+//                                                + cards_name + "&params[Phone]="
+//                                                + cards_mobile + "&params[Mail]="
+//                                                + cards_mail + "&params[Company]="
+//                                                + cards_company
+//                                                + "&params[Department]="
+//                                                + cards_part + "&params[Position]="
+//                                                + cards_job
+//                                                + "&params[CompanyWeb]="
+//                                                + cards_index + "&params[Address]="
+//                                                + cards_address + "&params[Sign]="
+//                                                + cards_signature
+//                                                + "&params[Weixin]=" + cards_weixin
+//                                                + "&is_default=1",
+//                                        IstroopConstants.cookieStore );
+//                                Log.i( TAG, "添加用户信息要服务器返回结果:" + result );
                                     if ( result != null ) {
                                         JSONObject object = new JSONObject( result );
                                         if ( object.getBoolean( "success" ) ) {
@@ -451,7 +493,7 @@ public class ICardTagCardActivity extends BaseActivity implements OnClickListene
                                         message.what = ICARD_TAG_CARD_ADD_FAIL;
                                         handler.sendMessage( message );
                                     }
-                                } catch ( JSONException e ) {
+                                } catch ( IOException | JSONException e ) {
                                     e.printStackTrace();
                                 }
                             }

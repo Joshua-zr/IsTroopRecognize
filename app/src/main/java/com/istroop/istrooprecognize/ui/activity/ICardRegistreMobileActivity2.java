@@ -18,7 +18,7 @@ import android.widget.Toast;
 import com.istroop.istrooprecognize.BaseActivity;
 import com.istroop.istrooprecognize.IstroopConstants;
 import com.istroop.istrooprecognize.R;
-import com.istroop.istrooprecognize.utils.HttpTools;
+import com.istroop.istrooprecognize.utils.Okhttps;
 import com.istroop.istrooprecognize.utils.Utils;
 
 import org.json.JSONException;
@@ -34,13 +34,14 @@ public class ICardRegistreMobileActivity2 extends BaseActivity implements
     protected static final int    ICARD_MOBILE_FAIL      = 2;
     protected static final int    REGISTER1_SEND_SUCCESS = 3;
     protected static final int    ICARD_REGISTER_MOBILE2 = 4;
-    private EditText       icard_register_mobile_sms_et;
-    private String         mobile;
-    private TextView       icard_register_mobile_sms_time;
-    private String         mobile_findpwd;
-    private String         mobile_code;
+    private EditText icard_register_mobile_sms_et;
+    private String   mobile;
+    private TextView icard_register_mobile_sms_time;
+    private String   mobile_findpwd;
+    private String   mobile_code;
     private MobileHandler handler = new MobileHandler();
-    private int page_number;
+    private int     page_number;
+    private Okhttps okhttps;
 
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
@@ -66,6 +67,8 @@ public class ICardRegistreMobileActivity2 extends BaseActivity implements
     }
 
     public void init() {
+        okhttps = Okhttps.getInstance();
+
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         if ( bundle != null ) {
@@ -175,10 +178,14 @@ public class ICardRegistreMobileActivity2 extends BaseActivity implements
                     new Thread() {
                         public void run() {
                             try {
-                                String string = HttpTools
-                                        .toString( IstroopConstants.URL_PATH
-                                                           + "/Mobile/ForgetPass/?mobile="
-                                                           + mobile );
+                                String string = okhttps.get(
+                                        IstroopConstants.URL_PATH
+                                                + "/Mobile/ForgetPass/?mobile="
+                                                + mobile );
+//                                        HttpTools
+//                                        .toString( IstroopConstants.URL_PATH
+//                                                           + "/Mobile/ForgetPass/?mobile="
+//                                                           + mobile );
                                 JSONObject object = new JSONObject( string );
                                 if ( object.getBoolean( "success" ) ) {
                                     mobile_code = object.getString( "data" );
@@ -215,10 +222,13 @@ public class ICardRegistreMobileActivity2 extends BaseActivity implements
             public void run() {
                 // Mobile/Validatecode?mobile=***&code=**
                 try {
-                    String string = HttpTools
-                            .toString( IstroopConstants.URL_PATH
-                                               + "/Mobile/Validatecode?mobile=" + mobile
-                                               + "&code=" + sms );
+                    String string = okhttps.get( IstroopConstants.URL_PATH
+                                                         + "/Mobile/Validatecode?mobile=" + mobile
+                                                         + "&code=" + sms );
+//                            HttpTools
+//                            .toString( IstroopConstants.URL_PATH
+//                                               + "/Mobile/Validatecode?mobile=" + mobile
+//                                               + "&code=" + sms );
                     if ( !TextUtils.isEmpty( string ) ) {
                         JSONObject jsonObject = new JSONObject( string );
                         if ( jsonObject.getBoolean( "success" ) ) {
@@ -234,7 +244,7 @@ public class ICardRegistreMobileActivity2 extends BaseActivity implements
                             handler.sendMessage( message );
                         }
                     }
-                } catch ( IOException | JSONException e ) {
+                } catch ( JSONException | IOException e ) {
                     e.printStackTrace();
                 }
             }

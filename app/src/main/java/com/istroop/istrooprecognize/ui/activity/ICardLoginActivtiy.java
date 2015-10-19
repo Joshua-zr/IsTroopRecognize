@@ -22,7 +22,6 @@ import android.widget.Toast;
 import com.istroop.istrooprecognize.BaseActivity;
 import com.istroop.istrooprecognize.IstroopConstants;
 import com.istroop.istrooprecognize.R;
-import com.istroop.istrooprecognize.utils.HttpTools;
 import com.istroop.istrooprecognize.utils.Okhttps;
 import com.istroop.istrooprecognize.utils.Utils;
 
@@ -147,15 +146,15 @@ public class ICardLoginActivtiy extends BaseActivity implements OnClickListener 
      * @param password 密码
      */
     public void isUserPwd( final String mail, final String password ) {
-        // 1.4 手机号登陆 /Mobile/MobileLogin/
         new Thread() {
             public void run() {
                 try {
-                    String loginInfo;
-                    IstroopConstants.cookieStore = null;
-                    loginInfo = okhttps.get( IstroopConstants.URL_PATH
-                                                     + "/Mobile/login/?user=" + mail + "&password="
-                                                     + password );
+                    String loginInfo = okhttps.get(
+                            IstroopConstants.URL_PATH
+                                    + "/Mobile/login/?user="
+                                    + mail
+                                    + "&password="
+                                    + password );
                     Utils.log( TAG, "denglu:" + loginInfo, 6 );
                     if ( TextUtils.isEmpty( loginInfo ) ) {
                         Message message = Message.obtain();
@@ -167,9 +166,6 @@ public class ICardLoginActivtiy extends BaseActivity implements OnClickListener 
                     if ( jsonObject.getBoolean( "success" ) ) {
                         IstroopConstants.isLogin = true;
                         IstroopConstants.mobile = mail;
-
-                        Log.i( TAG, "cookie信息:"
-                                + IstroopConstants.cookieStore );
 
                         if ( jsonObject.getBoolean( "success" ) ) {
                             JSONObject dataObject = jsonObject
@@ -196,9 +192,7 @@ public class ICardLoginActivtiy extends BaseActivity implements OnClickListener 
                         if ( mcontext != null ) {
                             saveLoginInfo( mcontext, password );
                         }
-
                     } else {
-                        // {"success":false,"data":{"errorCode":102},"message":"\u624b\u673a\u53f7\u6216\u5bc6\u7801\u9519\u8bef"}
                         String msg = jsonObject.getString( "message" );
                         Log.i( TAG, "登陆错误返回的信息:" + msg );
                         Message message = Message.obtain();

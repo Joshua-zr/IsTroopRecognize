@@ -17,11 +17,13 @@ import android.widget.Toast;
 import com.istroop.istrooprecognize.BaseActivity;
 import com.istroop.istrooprecognize.IstroopConstants;
 import com.istroop.istrooprecognize.R;
-import com.istroop.istrooprecognize.utils.HttpTools;
+import com.istroop.istrooprecognize.utils.Okhttps;
 import com.istroop.istrooprecognize.utils.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.IOException;
 
 public class ICardTagInfo extends BaseActivity implements OnClickListener {
 
@@ -49,6 +51,7 @@ public class ICardTagInfo extends BaseActivity implements OnClickListener {
     private IcardTagHandler handler  = new IcardTagHandler();
     private String[] contents;
     private String[] types;
+    private Okhttps  okhttps;
 
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
@@ -58,6 +61,8 @@ public class ICardTagInfo extends BaseActivity implements OnClickListener {
     }
 
     private void init() {
+
+        okhttps = Okhttps.getInstance();
         design_tag_link_info = ( RelativeLayout ) findViewById( R.id.design_tag_link_info );
         design_tag_link_exp_info = ( EditText ) findViewById( R.id.design_tag_link_exp_info );
         design_tag_title_info = ( RelativeLayout ) findViewById( R.id.design_tag_title_info );
@@ -234,7 +239,7 @@ public class ICardTagInfo extends BaseActivity implements OnClickListener {
                                     return;
                                 } else {
                                 /*
-								 * if(!TextUtils.isEmpty(title_sure)){
+                                 * if(!TextUtils.isEmpty(title_sure)){
 								 * if(!TextUtils.isEmpty(desc_sure)){ temp =
 								 * "&content[title]="
 								 * +title_sure+"&content[url]="+link_sure+
@@ -377,21 +382,17 @@ public class ICardTagInfo extends BaseActivity implements OnClickListener {
         new Thread() {
             public void run() {
                 // /ICard/setdefaulttag?default=1&content[title]=**&type=text&tid=***
-                String info;
-                if ( contents != null && contents.length != 0 ) {
-                    // 修改标记
-                    info = HttpTools.userInfo( IstroopConstants.URL_PATH
-                                                       + "/ICard/setdefaulttag?default=1" + temp + "&tid="
-                                                       + contents[0], IstroopConstants.cookieStore );
-                } else {
-                    info = HttpTools.userInfo( IstroopConstants.URL_PATH
-                                                       + "/ICard/setdefaulttag?default=1" + temp,
-                                               IstroopConstants.cookieStore );
-                }
-                if ( !TextUtils.isEmpty( info ) ) {
-                    Log.i( TAG, "添加标记返回的信息:" + info );
-                    // 添加标记返回的信息:{"success":true,"data":"\u8bbe\u7f6e\u6210\u529f"}
-                    try {
+                String info = null;
+                try {
+                    if ( contents != null && contents.length != 0 ) {
+                        // 修改标记
+                        info = okhttps.get( IstroopConstants.URL_PATH
+                                                    + "/ICard/setdefaulttag?default=1" + temp + "&tid="
+                                                    + contents[0] );
+                    }
+                    if ( !TextUtils.isEmpty( info ) ) {
+                        Log.i( TAG, "添加标记返回的信息:" + info );
+                        // 添加标记返回的信息:{"success":true,"data":"\u8bbe\u7f6e\u6210\u529f"}
                         JSONObject object = new JSONObject( info );
                         if ( object.getBoolean( "success" ) ) {
                             String data = object.getString( "data" );
@@ -400,16 +401,18 @@ public class ICardTagInfo extends BaseActivity implements OnClickListener {
                             message.what = TAG_INFO_ADD_SUCCESS;
                             handler.sendMessage( message );
                         }
-                    } catch ( JSONException e ) {
-                        e.printStackTrace();
+                    } else {
                         Message message = Message.obtain();
-                        message.what = TAG_INFO_ADD_FAIL;
+                        message.what = TAG_INFO_ADD_NULL;
                         handler.sendMessage( message );
                     }
-                } else {
+                } catch ( JSONException e ) {
+                    e.printStackTrace();
                     Message message = Message.obtain();
-                    message.what = TAG_INFO_ADD_NULL;
+                    message.what = TAG_INFO_ADD_FAIL;
                     handler.sendMessage( message );
+                } catch ( IOException e ) {
+                    e.printStackTrace();
                 }
             }
         }.start();

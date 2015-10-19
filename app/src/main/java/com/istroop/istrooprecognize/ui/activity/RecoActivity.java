@@ -8,7 +8,6 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.FeatureInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.media.Image;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -24,6 +23,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.VelocityTracker;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
@@ -41,7 +41,7 @@ import com.istroop.istrooprecognize.R;
 import com.istroop.istrooprecognize.WMDetectorThread;
 import com.istroop.istrooprecognize.utils.CameraManager;
 import com.istroop.istrooprecognize.utils.HisDBHelper;
-import com.istroop.istrooprecognize.utils.HttpTools;
+import com.istroop.istrooprecognize.utils.Okhttps;
 import com.istroop.istrooprecognize.utils.Utils;
 import com.istroop.openapi.Constant;
 import com.istroop.watermark.AndroidWMDetector;
@@ -98,13 +98,16 @@ public class RecoActivity extends BaseActivity implements SurfaceHolder.Callback
     private TranslateAnimation ta;
     private CameraManager      cameraManager;
 
+    private Okhttps okhttps;
+
     public RecoActivity() {}
 
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
         super.onCreate( savedInstanceState );
-        Logger.e( "onCreate" );
+        Logger.w( "onCreate" );
         setContentView( R.layout.reco );
+        okhttps = Okhttps.getInstance();
         hasFlashLight = hasFlashLight();
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics( metrics );
@@ -155,7 +158,8 @@ public class RecoActivity extends BaseActivity implements SurfaceHolder.Callback
     @Override
     protected void onStart() {
         super.onStart();
-        Logger.e( "onStart" );
+        VelocityTracker.obtain();
+        Logger.w( "onStart" );
         if ( flashIsOpen ) {
             flashIsOpen = false;
             flashBtn.setBackgroundResource( R.drawable.torch_off );
@@ -278,7 +282,7 @@ public class RecoActivity extends BaseActivity implements SurfaceHolder.Callback
     @Override
     protected void onPause() {
         super.onPause();
-        Log.e( TAG, "onPause" );
+        Logger.w( "onPause" );
         cameraManager.stopPreview();
         cameraManager.closeDriver();
     }
@@ -286,13 +290,13 @@ public class RecoActivity extends BaseActivity implements SurfaceHolder.Callback
     @Override
     protected void onStop() {
         super.onStop();
-        Log.e( TAG, "onStop" );
+        Logger.w( "onStop" );
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.e( TAG, "onDestory" );
+        Logger.w( "onDestroy" );
         if ( ta != null ) {
             ta.cancel();
         }
@@ -366,12 +370,7 @@ public class RecoActivity extends BaseActivity implements SurfaceHolder.Callback
         String picResult;
 
         try {
-            if ( IstroopConstants.isLogin ) {
-                picResult = HttpTools.userInfo( picurlStr,
-                                                IstroopConstants.cookieStore );
-            } else {
-                picResult = HttpTools.toString( picurlStr );
-            }
+            picResult = okhttps.get( picurlStr );
             Utils.log( TAG, "图片扫描结果" + picResult, 5 );
             try {
                 if ( picResult == null ) {
@@ -570,13 +569,13 @@ public class RecoActivity extends BaseActivity implements SurfaceHolder.Callback
                 String path = Constant.URL_PATH + "stat.gif?plat=android&type=scan&gps=" + Constant.coordinate.latitude + "," + Constant.coordinate.longitude + "&device_id=" + Constant.imei + "&device_type=" + Constant.model + "&appkey=" + Constant.appKey;
                 String result = null;
                 try {
-                    result = HttpTools.toString( path );
+                    result = okhttps.get( path );
                 } catch ( IOException e ) {
                     e.printStackTrace();
                 }
                 Utils.log( TAG, result, 5 );
             }
-        };
+        }.start();
     }
 
     private void setVibrator() {
@@ -748,29 +747,47 @@ public class RecoActivity extends BaseActivity implements SurfaceHolder.Callback
                                 new Thread() {
                                     @Override
                                     public void run() {
-                                        hisInfo = HttpTools.userInfo(
-                                                IstroopConstants.URL_PATH
-                                                        + "/ICard/setHistory/?pid="
-                                                        + dB_pid + "&params[wmid]="
-                                                        + DB_wm_id
-                                                        + "&params[Type]="
-                                                        + DB_tag_type
-                                                        + "&params[Title]="
-                                                        + DB_tag_title.trim()
-                                                        + "&params[Createtime]="
-                                                        + DB_mtime
-                                                        + "&params[Desc]="
-                                                        + DB_tag_desc
-                                                        + "&params[Link]="
-                                                        + DB_tag_url
-                                                        + "&params[Address]="
-                                                        + DB_location
-                                                        + "&params[PicUrl]="
-                                                        + DB_fileurl,
-                                                IstroopConstants.cookieStore );
+                                        try {
+                                            hisInfo = okhttps.get( IstroopConstants.URL_PATH
+                                                                           + "/ICard/setHistory/?pid="
+                                                                           + dB_pid + "&params[wmid]="
+                                                                           + DB_wm_id
+                                                                           + "&params[Type]="
+                                                                           + DB_tag_type
+                                                                           + "&params[Title]="
+                                                                           + DB_tag_title.trim()
+                                                                           + "&params[Createtime]="
+                                                                           + DB_mtime
+                                                                           + "&params[Desc]="
+                                                                           + DB_tag_desc
+                                                                           + "&params[Link]="
+                                                                           + DB_tag_url
+                                                                           + "&params[Address]="
+                                                                           + DB_location
+                                                                           + "&params[PicUrl]="
+                                                                           + DB_fileurl );
+//                                        hisInfo = HttpTools.userInfo(
+//                                                IstroopConstants.URL_PATH
+//                                                        + "/ICard/setHistory/?pid="
+//                                                        + dB_pid + "&params[wmid]="
+//                                                        + DB_wm_id
+//                                                        + "&params[Type]="
+//                                                        + DB_tag_type
+//                                                        + "&params[Title]="
+//                                                        + DB_tag_title.trim()
+//                                                        + "&params[Createtime]="
+//                                                        + DB_mtime
+//                                                        + "&params[Desc]="
+//                                                        + DB_tag_desc
+//                                                        + "&params[Link]="
+//                                                        + DB_tag_url
+//                                                        + "&params[Address]="
+//                                                        + DB_location
+//                                                        + "&params[PicUrl]="
+//                                                        + DB_fileurl,
+//                                                IstroopConstants.cookieStore );
 //									LogUtil.i(TAG, "历史记录更新服务器" + hisInfo);
-                                        if ( hisInfo != null ) {
-                                            try {
+                                            if ( hisInfo != null ) {
                                                 JSONObject jsonObject = new JSONObject(
                                                         hisInfo );
                                                 if ( jsonObject
@@ -787,9 +804,9 @@ public class RecoActivity extends BaseActivity implements SurfaceHolder.Callback
                                                     main_handler
                                                             .sendMessage( message );
                                                 }
-                                            } catch ( JSONException e ) {
-                                                e.printStackTrace();
                                             }
+                                        } catch ( JSONException | IOException e ) {
+                                            e.printStackTrace();
                                         }
                                     }
                                 }.start();
@@ -802,26 +819,41 @@ public class RecoActivity extends BaseActivity implements SurfaceHolder.Callback
                                     DB_tag_title = replaceBlank( DB_tag_title );
                                     DB_tag_desc = replaceBlank( DB_tag_desc );
                                     DB_location = replaceBlank( DB_location );
-                                    hisInfo = HttpTools.userInfo(
-                                            IstroopConstants.URL_PATH
-                                                    + "/ICard/setHistory/?"
-                                                    + "params[wmid]=" + DB_wm_id
-                                                    + "&params[Type]="
-                                                    + DB_tag_type
-                                                    + "&params[Title]="
-                                                    + DB_tag_title.split( " " )[0]
-                                                    + "&params[Createtime]="
-                                                    + DB_mtime + "&params[Desc]="
-                                                    + DB_tag_desc
-                                                    + "&params[Link]=" + DB_tag_url
-                                                    + "&params[Address]="
-                                                    + DB_location
-                                                    + "&params[PicUrl]="
-                                                    + DB_fileurl,
-                                            IstroopConstants.cookieStore );
+                                    try {
+                                        hisInfo = okhttps.get( IstroopConstants.URL_PATH
+                                                                       + "/ICard/setHistory/?"
+                                                                       + "params[wmid]=" + DB_wm_id
+                                                                       + "&params[Type]="
+                                                                       + DB_tag_type
+                                                                       + "&params[Title]="
+                                                                       + DB_tag_title.split( " " )[0]
+                                                                       + "&params[Createtime]="
+                                                                       + DB_mtime + "&params[Desc]="
+                                                                       + DB_tag_desc
+                                                                       + "&params[Link]=" + DB_tag_url
+                                                                       + "&params[Address]="
+                                                                       + DB_location
+                                                                       + "&params[PicUrl]="
+                                                                       + DB_fileurl );
+//                                    hisInfo = HttpTools.userInfo(
+//                                            IstroopConstants.URL_PATH
+//                                                    + "/ICard/setHistory/?"
+//                                                    + "params[wmid]=" + DB_wm_id
+//                                                    + "&params[Type]="
+//                                                    + DB_tag_type
+//                                                    + "&params[Title]="
+//                                                    + DB_tag_title.split( " " )[0]
+//                                                    + "&params[Createtime]="
+//                                                    + DB_mtime + "&params[Desc]="
+//                                                    + DB_tag_desc
+//                                                    + "&params[Link]=" + DB_tag_url
+//                                                    + "&params[Address]="
+//                                                    + DB_location
+//                                                    + "&params[PicUrl]="
+//                                                    + DB_fileurl,
+//                                            IstroopConstants.cookieStore );
 //								LogUtil.i(TAG, "历史记录传入服务器" + hisInfo);
-                                    if ( hisInfo != null ) {
-                                        try {
+                                        if ( hisInfo != null ) {
                                             JSONObject jsonObject = new JSONObject(
                                                     hisInfo );
                                             if ( jsonObject.getBoolean( "success" ) ) {
@@ -833,9 +865,9 @@ public class RecoActivity extends BaseActivity implements SurfaceHolder.Callback
                                                 message.what = HIS_ADD_FAIL;
                                                 main_handler.sendMessage( message );
                                             }
-                                        } catch ( JSONException e ) {
-                                            e.printStackTrace();
                                         }
+                                    } catch ( JSONException | IOException e ) {
+                                        e.printStackTrace();
                                     }
                                 }
                             }.start();
